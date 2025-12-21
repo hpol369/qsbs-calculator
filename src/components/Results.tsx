@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { CalculationResults, CalculatorInputs } from '@/lib/calculations';
 import { formatCurrency, formatDate, formatPercent } from '@/lib/calculations';
 import { generateShareableUrl, copyToClipboard } from '@/lib/url-state';
+import ScenarioComparison from './ScenarioComparison';
 
 interface ResultsProps {
   results: CalculationResults;
@@ -349,6 +350,9 @@ export default function Results({ results, inputs, onReset }: ResultsProps) {
           </p>
         </div>
       </div>
+
+      {/* Scenario Comparison */}
+      <ScenarioComparison baseInputs={inputs} baseResults={results} />
 
       {/* Disclaimer */}
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-600">
