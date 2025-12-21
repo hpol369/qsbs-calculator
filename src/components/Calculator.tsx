@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useMemo, useId } from 'react';
+import { useState, useEffect, useMemo, useId, useCallback } from 'react';
 import { sortedStates } from '@/lib/states';
 import type { CalculatorInputs, StockType, AcquisitionMethod, CalculationResults } from '@/lib/calculations';
 import { calculateAll, getQualificationDate } from '@/lib/calculations';
 import { decodeState } from '@/lib/url-state';
 import Results from './Results';
+import SavedScenariosPanel from './SavedScenariosPanel';
 
 const stockTypeOptions: { value: StockType; label: string }[] = [
   { value: 'common_stock', label: 'Common Stock' },
@@ -347,8 +348,38 @@ export default function Calculator() {
     return Object.keys(validateForm()).length === 0;
   };
 
+  // Handle loading a saved scenario
+  const handleLoadScenario = useCallback((loadedInputs: CalculatorInputs, loadedResults: CalculationResults) => {
+    setInputs(loadedInputs);
+    setResults(loadedResults);
+    setShowResults(true);
+
+    // Also populate the form fields in case user wants to modify
+    setStockType(loadedInputs.stockType);
+    setAcquisitionMethod(loadedInputs.acquisitionMethod);
+    setElection83b(loadedInputs.election83b);
+    setGrantDate(formatDateForInput(loadedInputs.grantDate));
+    setExerciseDate(formatDateForInput(loadedInputs.exerciseDate));
+    setVestingDate(formatDateForInput(loadedInputs.vestingDate));
+    setPurchaseDate(formatDateForInput(loadedInputs.purchaseDate));
+    setConversionDate(formatDateForInput(loadedInputs.conversionDate));
+    setSaleDate(formatDateForInput(loadedInputs.saleDate));
+    setCostBasis(loadedInputs.costBasis.toString());
+    setExpectedValue(loadedInputs.expectedValue.toString());
+    setStateCode(loadedInputs.stateCode);
+  }, []);
+
   if (showResults && results && inputs) {
-    return <Results results={results} inputs={inputs} onReset={handleReset} />;
+    return (
+      <>
+        <Results results={results} inputs={inputs} onReset={handleReset} />
+        <SavedScenariosPanel
+          currentInputs={inputs}
+          currentResults={results}
+          onLoadScenario={handleLoadScenario}
+        />
+      </>
+    );
   }
 
   return (
@@ -821,6 +852,9 @@ export default function Calculator() {
           )}
         </div>
       </form>
+
+      {/* Saved Scenarios Panel - available from form view to load previous scenarios */}
+      <SavedScenariosPanel onLoadScenario={handleLoadScenario} />
     </div>
   );
 }
