@@ -4,6 +4,9 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Methodology – QSBS Calculator',
   description: 'How our QSBS calculator determines holding period start dates, exclusion amounts, and state conformity status. Sources and limitations explained.',
+  alternates: {
+    canonical: '/methodology',
+  },
 };
 
 export default function MethodologyPage() {
