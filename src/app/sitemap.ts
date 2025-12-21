@@ -37,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     // Tier 2: Supporting problem pages
     {
+      url: `${baseUrl}/dont-qualify`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/selling-early`,
       lastModified: new Date(),
       changeFrequency: 'monthly',

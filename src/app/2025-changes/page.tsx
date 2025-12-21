@@ -2,24 +2,25 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import Calculator from '@/components/Calculator';
+import RegimeChecker from '@/components/RegimeChecker';
 
 export const metadata: Metadata = {
-  title: "2025 QSBS Law Changes: OBBBA Expands Section 1202",
-  description: "July 2025 OBBBA expanded QSBS: $15M cap, partial exclusions at 3-4 years, $75M asset threshold. What changed and who benefits.",
+  title: "Which QSBS Rules Apply to Your Stock? 2025 Law Changes",
+  description: "QSBS rules changed July 2025. Check if old rules ($10M cap, 5 years) or new rules ($15M cap, partial exclusions at 3-4 years) apply to your stock.",
   alternates: {
     canonical: '/2025-changes',
   },
   openGraph: {
-    title: "2025 QSBS Law Changes: OBBBA Expands Section 1202",
-    description: "July 2025 OBBBA expanded QSBS: $15M cap, partial exclusions at 3-4 years, $75M threshold.",
+    title: "Which QSBS Rules Apply to Your Stock?",
+    description: "Check if old or new QSBS rules apply based on your stock acquisition date.",
     url: 'https://www.qsbsguide.com/2025-changes',
     siteName: 'QSBS Guide',
     type: 'article',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "2025 QSBS Law Changes: OBBBA Expands Section 1202",
-    description: "$15M cap, partial exclusions at 3-4 years. What changed.",
+    title: "Which QSBS Rules Apply to Your Stock?",
+    description: "Old rules or new rules? Check based on your acquisition date.",
   },
 };
 
@@ -106,6 +107,9 @@ export default function Changes2025Page() {
             If you got your shares before July 5, 2025, the old rules still apply to you.
           </p>
         </div>
+
+        {/* Quick Check Tool */}
+        <RegimeChecker />
 
         {/* The Key Changes */}
         <section className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 mb-8">

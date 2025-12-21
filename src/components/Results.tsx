@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import type { CalculationResults, CalculatorInputs } from '@/lib/calculations';
 import { formatCurrency, formatDate, formatPercent } from '@/lib/calculations';
 import { generateShareableUrl, copyToClipboard } from '@/lib/url-state';
@@ -360,6 +361,86 @@ export default function Results({ results, inputs, onReset }: ResultsProps) {
         <p className="mt-2">
           Before you sell, talk to someone who can verify the company-level requirements.
         </p>
+      </div>
+
+      {/* What's Next - Contextual links based on results */}
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden print:hidden">
+        <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+          <h3 className="font-semibold text-gray-900">What&apos;s Next?</h3>
+        </div>
+        <div className="p-6">
+          <div className="grid gap-3">
+            {/* Show if selling before qualification and no exclusion */}
+            {holdingPeriod.saleDateBeforeQualification && exclusion.exclusionPercent === 0 && (
+              <Link href="/dont-qualify" className="block bg-red-50 rounded-lg p-4 hover:bg-red-100 transition-colors">
+                <p className="font-medium text-red-900">You don&apos;t qualify yet—but you have options</p>
+                <p className="text-sm text-red-700 mt-1">
+                  Section 1045 rollover, deal timing, and other strategies when QSBS doesn&apos;t apply.
+                </p>
+              </Link>
+            )}
+
+            {/* Show if selling before qualification but has partial exclusion (post-OBBBA) */}
+            {holdingPeriod.saleDateBeforeQualification && exclusion.exclusionPercent > 0 && exclusion.exclusionPercent < 1 && (
+              <Link href="/selling-early" className="block bg-amber-50 rounded-lg p-4 hover:bg-amber-100 transition-colors">
+                <p className="font-medium text-amber-900">Getting partial exclusion—could you wait for full?</p>
+                <p className="text-sm text-amber-700 mt-1">
+                  You&apos;re getting {formatPercent(exclusion.exclusionPercent)} exclusion. Waiting until {formatDate(holdingPeriod.qualificationDate)} would give you 100%.
+                </p>
+              </Link>
+            )}
+
+            {/* Show if days remaining (not yet qualified but will be) */}
+            {!holdingPeriod.isQualified && holdingPeriod.daysRemaining > 0 && !holdingPeriod.saleDateBeforeQualification && (
+              <Link href="/holding-period" className="block bg-blue-50 rounded-lg p-4 hover:bg-blue-100 transition-colors">
+                <p className="font-medium text-blue-900">Make sure your holding period date is correct</p>
+                <p className="text-sm text-blue-700 mt-1">
+                  The most common mistake: using the wrong start date. Double-check before you sell.
+                </p>
+              </Link>
+            )}
+
+            {/* Show if state doesn't conform */}
+            {stateTax.status === 'none' && (
+              <Link href="/california" className="block bg-amber-50 rounded-lg p-4 hover:bg-amber-100 transition-colors">
+                <p className="font-medium text-amber-900">{stateTax.stateName} doesn&apos;t recognize QSBS</p>
+                <p className="text-sm text-amber-700 mt-1">
+                  You&apos;ll owe ~{formatCurrency(stateTax.taxWithQSBS)} to {stateTax.stateName} even with federal QSBS.
+                  {stateTax.stateCode === 'CA' && ' Some founders relocate—here\'s what to know.'}
+                </p>
+              </Link>
+            )}
+
+            {/* Show if gain exceeds cap */}
+            {exclusion.taxableGain > 0 && exclusion.actualExclusion > 0 && (
+              <Link href="/10-million-limit" className="block bg-blue-50 rounded-lg p-4 hover:bg-blue-100 transition-colors">
+                <p className="font-medium text-blue-900">Your gain exceeds the exclusion cap</p>
+                <p className="text-sm text-blue-700 mt-1">
+                  {formatCurrency(exclusion.actualExclusion)} excluded, {formatCurrency(exclusion.taxableGain)} taxable. Learn about gift stacking and other strategies.
+                </p>
+              </Link>
+            )}
+
+            {/* Show if fully qualified - general success case */}
+            {holdingPeriod.isQualified && exclusion.isFullyExcluded && stateTax.status !== 'none' && (
+              <div className="bg-emerald-50 rounded-lg p-4">
+                <p className="font-medium text-emerald-900">You&apos;re in good shape</p>
+                <p className="text-sm text-emerald-700 mt-1">
+                  Your holding period is complete and your gain is fully excludable.
+                  Just verify company-level requirements with your tax advisor before selling.
+                </p>
+              </div>
+            )}
+
+            {/* Always show - learn more */}
+            <Link href="/methodology" className="block bg-gray-100 rounded-lg p-4 hover:bg-gray-200 transition-colors">
+              <p className="font-medium text-gray-900">How we calculated this</p>
+              <p className="text-sm text-gray-600 mt-1">
+                Our methodology, data sources, and what we can&apos;t verify.
+              </p>
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Print-only footer */}

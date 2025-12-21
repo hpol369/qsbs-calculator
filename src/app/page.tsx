@@ -42,17 +42,16 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 py-8 print:py-4">
-        {/* Hero - Rewritten with voice */}
+        {/* Hero - Problem-First */}
         <div className="text-center mb-8 print:hidden">
           <h2 className="text-3xl font-bold text-gray-900 mb-3">
-            Find out if you&apos;re about to save $500K—or lose it.
+            Do You Actually Qualify for QSBS?
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-2">
-            Most founders don&apos;t check their QSBS status until they&apos;re 60 days from closing.
-            By then it&apos;s too late to fix.
+            Most people think they do. Most people are wrong about when their 5-year clock started.
           </p>
           <p className="text-base text-gray-500">
-            Not sure when your 5-year clock started? Most people get it wrong.
+            Find out in 60 seconds—before you accidentally trigger a $500K tax bill.
           </p>
         </div>
 
@@ -365,6 +364,14 @@ export default function Home() {
               <Link href="/10-million-limit" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
                 <h3 className="font-medium text-emerald-700 mb-1">What&apos;s the QSBS exclusion cap?</h3>
                 <p className="text-sm text-gray-600">$10M for pre-July 2025 stock, $15M for newer stock. Or 10× your basis if higher.</p>
+              </Link>
+              <Link href="/dont-qualify" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 className="font-medium text-emerald-700 mb-1">What if I don&apos;t qualify for QSBS?</h3>
+                <p className="text-sm text-gray-600">You have options: Section 1045 rollover, deal timing, and tax planning strategies.</p>
+              </Link>
+              <Link href="/selling-early" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 className="font-medium text-emerald-700 mb-1">What if I have to sell before 5 years?</h3>
+                <p className="text-sm text-gray-600">Section 1045 rollover and other strategies if you can&apos;t wait.</p>
               </Link>
             </div>
           </section>

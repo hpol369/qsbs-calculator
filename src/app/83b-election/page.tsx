@@ -308,6 +308,43 @@ export default function Election83bPage() {
           </div>
         </section>
 
+        {/* Missed Deadline Recovery */}
+        <section className="bg-slate-800 text-white rounded-xl p-6 mb-8">
+          <h2 className="text-xl font-semibold mb-4">What If I Already Missed the 30-Day Deadline?</h2>
+
+          <p className="text-slate-300 mb-4">
+            There is no extension. No exception. No fix. If you received restricted stock more than 30 days ago and didn&apos;t file an 83(b), your QSBS holding period starts at vesting, not grant.
+          </p>
+
+          <div className="bg-slate-700 rounded-lg p-4 mb-4">
+            <p className="text-slate-200 font-medium mb-2">What this means:</p>
+            <ul className="text-slate-300 text-sm space-y-1">
+              <li>• 4-year vesting schedule = your clock started when shares vested</li>
+              <li>• Each vesting tranche has its own separate holding period</li>
+              <li>• Your earliest shares might qualify before your latest shares</li>
+            </ul>
+          </div>
+
+          <div className="bg-slate-700 rounded-lg p-4 mb-4 font-mono text-sm">
+            <p className="text-slate-400 mb-2">Example with 4-year vest, 1-year cliff:</p>
+            <p className="text-slate-300">Granted: Jan 1, 2020</p>
+            <p className="text-slate-300">Cliff vests (25%): Jan 1, 2021 → qualifies Jan 2, 2026</p>
+            <p className="text-slate-300">Monthly vests continue...</p>
+            <p className="text-slate-300">Final vest: Jan 1, 2024 → qualifies Jan 2, 2029</p>
+          </div>
+
+          <p className="text-slate-200 font-medium mb-2">What you CAN do:</p>
+          <ul className="text-slate-300 text-sm space-y-2">
+            <li>• <strong>Calculate each tranche separately</strong> — know exactly when each portion qualifies</li>
+            <li>• <strong>Consider selling in tranches</strong> — sell qualified shares while holding the rest</li>
+            <li>• <strong>Plan around your dates</strong> — if a liquidity event is coming, know which shares will qualify</li>
+          </ul>
+
+          <p className="text-slate-400 text-sm mt-4">
+            In the calculator below, enter your vesting date (not grant date) to see when your shares will qualify.
+          </p>
+        </section>
+
         {/* Related Questions */}
         <section className="bg-gray-100 rounded-xl p-6 mb-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Related Questions</h2>
@@ -323,6 +360,9 @@ export default function Election83bPage() {
             </Link>
             <Link href="/10-million-limit" className="block text-emerald-600 hover:text-emerald-700 font-medium">
               What&apos;s the exclusion cap? → $10M or $15M depending on when you got stock.
+            </Link>
+            <Link href="/dont-qualify" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              Don&apos;t qualify for QSBS? → Your options when the exclusion doesn&apos;t apply.
             </Link>
           </div>
         </section>
