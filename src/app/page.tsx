@@ -14,11 +14,31 @@ export default function Home() {
             </div>
             <div className="text-right text-xs text-gray-400">
               <p>Updated December 2025</p>
-              <p>IRC §1202 current</p>
+              <p>IRC §1202 + OBBBA</p>
             </div>
           </div>
         </div>
       </header>
+
+      {/* 2025 Law Change Banner */}
+      <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white print:hidden">
+        <div className="max-w-4xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="bg-white/20 text-xs font-bold px-2 py-1 rounded">NEW LAW</span>
+              <p className="text-sm">
+                <strong>July 2025:</strong> QSBS rules changed. Stock acquired after July 4, 2025 gets a $15M cap and partial exclusions at 3-4 years.
+              </p>
+            </div>
+            <Link
+              href="/2025-changes"
+              className="text-sm font-medium bg-white/20 hover:bg-white/30 px-3 py-1 rounded whitespace-nowrap transition-colors"
+            >
+              Learn more →
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 py-8 print:py-4">
@@ -44,7 +64,7 @@ export default function Home() {
             It&apos;s not your grant date. Restricted stock? Depends on your 83(b). RSUs? Not until delivery.
           </p>
           <p className="text-slate-400 text-sm">
-            Get this wrong and you sell early. Sell early and you lose everything.
+            Get this wrong and you sell early. Sell early and you lose everything—though new 2025 rules add partial exclusions for 3-4 year holds on newer stock.
           </p>
         </div>
 
@@ -60,7 +80,7 @@ export default function Home() {
             <div className="text-gray-600 space-y-4">
               <p>
                 Sell your startup stock after 5 years and you might owe zero federal tax on the gain.
-                Up to $10M, sometimes more.
+                Up to $10M for pre-July 2025 stock, $15M for newer stock.
               </p>
               <p className="font-medium text-gray-900">
                 The catch: most people screw it up.

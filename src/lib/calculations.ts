@@ -33,6 +33,18 @@ export interface CalculatorInputs {
   stateCode: string;
 }
 
+// OBBBA (One Big Beautiful Bill Act) effective date - July 4, 2025
+export const OBBBA_EFFECTIVE_DATE = new Date('2025-07-05');
+
+export type QSBSRegime = 'pre-obbba' | 'post-obbba';
+
+export interface RegimeInfo {
+  regime: QSBSRegime;
+  maxExclusionCap: number;
+  grossAssetsThreshold: number;
+  holdingPeriodTiers: { years: number; exclusionPercent: number }[];
+}
+
 export interface HoldingPeriodResult {
   startDate: Date | null;
   qualificationDate: Date | null;
@@ -40,6 +52,12 @@ export interface HoldingPeriodResult {
   daysRemaining: number;
   explanation: string;
   saleDateBeforeQualification: boolean;
+  regime: RegimeInfo;
+  partialQualification?: {
+    yearsHeld: number;
+    exclusionPercent: number;
+    isPartiallyQualified: boolean;
+  };
 }
 
 export interface ExclusionResult {
@@ -77,6 +95,43 @@ export interface CalculationResults {
   stateTax: StateTaxResult;
   totalSavings: number;
   totalTaxOwed: number;
+}
+
+/**
+ * Determines which QSBS regime applies based on stock acquisition date
+ */
+export function getQSBSRegime(acquisitionDate: Date | null): RegimeInfo {
+  const isPostOBBBA = acquisitionDate && acquisitionDate >= OBBBA_EFFECTIVE_DATE;
+
+  if (isPostOBBBA) {
+    return {
+      regime: 'post-obbba',
+      maxExclusionCap: 15_000_000,
+      grossAssetsThreshold: 75_000_000,
+      holdingPeriodTiers: [
+        { years: 3, exclusionPercent: 0.50 },
+        { years: 4, exclusionPercent: 0.75 },
+        { years: 5, exclusionPercent: 1.00 },
+      ],
+    };
+  }
+
+  return {
+    regime: 'pre-obbba',
+    maxExclusionCap: 10_000_000,
+    grossAssetsThreshold: 50_000_000,
+    holdingPeriodTiers: [
+      { years: 5, exclusionPercent: 1.00 },
+    ],
+  };
+}
+
+/**
+ * Calculate years held from start date to sale date
+ */
+export function getYearsHeld(startDate: Date, saleDate: Date): number {
+  const diffMs = saleDate.getTime() - startDate.getTime();
+  return diffMs / (1000 * 60 * 60 * 24 * 365.25);
 }
 
 /**
@@ -167,6 +222,7 @@ export function calculateHoldingPeriod(inputs: CalculatorInputs): HoldingPeriodR
   const qualificationDate = getQualificationDate(startDate);
   const today = new Date();
   const saleDate = inputs.saleDate;
+  const regime = getQSBSRegime(startDate);
 
   // Handle inheritance - immediately qualified
   if (inputs.stockType === 'inheritance') {
@@ -176,7 +232,8 @@ export function calculateHoldingPeriod(inputs: CalculatorInputs): HoldingPeriodR
       isQualified: true,
       daysRemaining: 0,
       explanation,
-      saleDateBeforeQualification: false
+      saleDateBeforeQualification: false,
+      regime
     };
   }
 
@@ -187,7 +244,8 @@ export function calculateHoldingPeriod(inputs: CalculatorInputs): HoldingPeriodR
       isQualified: false,
       daysRemaining: 0,
       explanation: 'Unable to calculate holding period.',
-      saleDateBeforeQualification: false
+      saleDateBeforeQualification: false,
+      regime
     };
   }
 
@@ -198,13 +256,36 @@ export function calculateHoldingPeriod(inputs: CalculatorInputs): HoldingPeriodR
 
   const saleDateBeforeQualification = saleDate < qualificationDate;
 
+  // Calculate partial qualification for post-OBBBA stock
+  let partialQualification = undefined;
+  if (regime.regime === 'post-obbba' && startDate) {
+    const yearsHeld = getYearsHeld(startDate, saleDate);
+    let exclusionPercent = 0;
+    let isPartiallyQualified = false;
+
+    for (const tier of regime.holdingPeriodTiers) {
+      if (yearsHeld >= tier.years) {
+        exclusionPercent = tier.exclusionPercent;
+        isPartiallyQualified = true;
+      }
+    }
+
+    partialQualification = {
+      yearsHeld: Math.floor(yearsHeld * 10) / 10, // Round to 1 decimal
+      exclusionPercent,
+      isPartiallyQualified,
+    };
+  }
+
   return {
     startDate,
     qualificationDate,
     isQualified,
     daysRemaining,
     explanation,
-    saleDateBeforeQualification
+    saleDateBeforeQualification,
+    regime,
+    partialQualification
   };
 }
 
@@ -227,22 +308,38 @@ export function getExclusionPercentage(acquisitionDate: Date): number {
 /**
  * Calculates the QSBS exclusion amount
  */
-export function calculateExclusion(inputs: CalculatorInputs, holdingPeriodStart: Date | null): ExclusionResult {
+export function calculateExclusion(
+  inputs: CalculatorInputs,
+  holdingPeriodResult: HoldingPeriodResult
+): ExclusionResult {
   const { costBasis, expectedValue } = inputs;
   const gain = Math.max(0, expectedValue - costBasis);
+  const { startDate, regime, partialQualification, isQualified, saleDateBeforeQualification } = holdingPeriodResult;
 
   // Use holding period start for exclusion percentage, fallback to today for inheritance
-  const acquisitionDate = holdingPeriodStart || new Date();
-  const exclusionPercent = getExclusionPercentage(acquisitionDate);
+  const acquisitionDate = startDate || new Date();
 
-  // Maximum exclusion: greater of $10M or 10x basis
-  const maxExclusion = Math.max(10_000_000, costBasis * 10);
+  // For post-OBBBA stock, use tiered exclusion percentages
+  let exclusionPercent: number;
+  if (regime.regime === 'post-obbba' && partialQualification) {
+    exclusionPercent = partialQualification.exclusionPercent;
+  } else if (isQualified || !saleDateBeforeQualification) {
+    // Pre-OBBBA with full qualification
+    exclusionPercent = getExclusionPercentage(acquisitionDate);
+  } else {
+    // Pre-OBBBA selling early = 0% exclusion
+    exclusionPercent = 0;
+  }
+
+  // Maximum exclusion: greater of cap or 10x basis
+  // Cap is $15M for post-OBBBA, $10M for pre-OBBBA
+  const maxExclusion = Math.max(regime.maxExclusionCap, costBasis * 10);
 
   // Calculate excludable amount
   const potentialExclusion = gain * exclusionPercent;
   const actualExclusion = Math.min(potentialExclusion, maxExclusion);
 
-  // Taxable amount (if gain exceeds cap)
+  // Taxable amount (if gain exceeds cap or exclusion is partial)
   const taxableGain = Math.max(0, gain - actualExclusion);
 
   return {
@@ -347,7 +444,7 @@ export function calculateStateTax(
  */
 export function calculateAll(inputs: CalculatorInputs): CalculationResults {
   const holdingPeriod = calculateHoldingPeriod(inputs);
-  const exclusion = calculateExclusion(inputs, holdingPeriod.startDate);
+  const exclusion = calculateExclusion(inputs, holdingPeriod);
   const federalTax = calculateFederalTax(exclusion);
   const stateTax = calculateStateTax(inputs.stateCode, exclusion.gain, exclusion.actualExclusion);
 
