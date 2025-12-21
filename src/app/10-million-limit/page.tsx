@@ -4,22 +4,22 @@ import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
-  title: "The QSBS $10M/$15M Exclusion Limit Explained",
-  description: "QSBS allows you to exclude up to $10M (or $15M for post-July 2025 stock) or 10x your basis. Here's how the cap works.",
+  title: "My Gain Exceeds $10M—Can I Exclude More? QSBS Cap Strategies",
+  description: "QSBS caps at $10M (or $15M post-July 2025). If your gain exceeds this, gift stacking, spouse transfers, and charitable giving can multiply your exclusion.",
   alternates: {
     canonical: '/10-million-limit',
   },
   openGraph: {
-    title: "The QSBS $10M/$15M Exclusion Limit Explained",
-    description: "How the QSBS exclusion cap works, when the 10x rule applies, and planning strategies.",
+    title: "My Gain Exceeds $10M—Can I Exclude More?",
+    description: "Strategies to maximize your QSBS exclusion when your gain exceeds the cap.",
     url: 'https://www.qsbsguide.com/10-million-limit',
     siteName: 'QSBS Guide',
     type: 'article',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "The QSBS $10M/$15M Exclusion Limit Explained",
-    description: "How the QSBS exclusion cap works.",
+    title: "My Gain Exceeds $10M—Can I Exclude More?",
+    description: "QSBS cap strategies: gift stacking, spouse transfers, and more.",
   },
 };
 
@@ -278,6 +278,85 @@ export default function TenMillionLimitPage() {
           </div>
         </section>
 
+        {/* Gift Stacking Deep Dive */}
+        <section className="bg-slate-800 text-white rounded-xl p-6 mb-8">
+          <h2 className="text-xl font-semibold mb-4">Gift Stacking: How It Works</h2>
+
+          <p className="text-slate-300 mb-4">
+            Each person who receives QSBS gets their own $10M exclusion. By gifting shares before a sale, you can multiply the family&apos;s total exclusion.
+          </p>
+
+          <div className="bg-slate-700 rounded-lg p-4 mb-4">
+            <p className="text-slate-200 font-medium mb-3">Example: $40M gain, family of four</p>
+            <div className="space-y-2 font-mono text-sm">
+              <div className="flex justify-between border-b border-slate-600 pb-2">
+                <span className="text-slate-400">Without gift stacking:</span>
+                <span></span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">You exclude</span>
+                <span className="text-emerald-400">$10M</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Taxable gain</span>
+                <span className="text-red-400">$30M</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Federal tax at 23.8%</span>
+                <span className="text-red-400">~$7.14M</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-700 rounded-lg p-4 mb-4">
+            <div className="space-y-2 font-mono text-sm">
+              <div className="flex justify-between border-b border-slate-600 pb-2">
+                <span className="text-slate-400">With gift stacking (you + spouse + 2 children):</span>
+                <span></span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">You exclude</span>
+                <span className="text-emerald-400">$10M</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Spouse excludes</span>
+                <span className="text-emerald-400">$10M</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Child 1 excludes</span>
+                <span className="text-emerald-400">$10M</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Child 2 excludes</span>
+                <span className="text-emerald-400">$10M</span>
+              </div>
+              <div className="flex justify-between border-t border-slate-600 pt-2">
+                <span className="text-slate-300">Total excluded</span>
+                <span className="text-emerald-400">$40M</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Taxable gain</span>
+                <span className="text-emerald-400">$0</span>
+              </div>
+              <div className="flex justify-between font-bold">
+                <span className="text-slate-200">Tax saved</span>
+                <span className="text-emerald-400">~$7.14M</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-amber-900/50 border border-amber-700 rounded-lg p-4">
+            <p className="text-amber-300 font-medium mb-2">Critical requirements:</p>
+            <ul className="text-amber-200 text-sm space-y-1">
+              <li>&bull; Gifts must be completed before the sale (or binding agreement)</li>
+              <li>&bull; Gift tax returns required—uses lifetime exemption or triggers gift tax</li>
+              <li>&bull; Minors typically need a trust (UTMA or irrevocable)</li>
+              <li>&bull; Each recipient must meet their own 5-year holding period</li>
+              <li>&bull; Work with an estate planning attorney—this is complex</li>
+            </ul>
+          </div>
+        </section>
+
         {/* Aggregation Rules */}
         <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">The Fine Print: Aggregation Rules</h2>
@@ -318,6 +397,12 @@ export default function TenMillionLimitPage() {
             </Link>
             <Link href="/selling-early" className="block text-emerald-600 hover:text-emerald-700 font-medium">
               What if I sell before 5 years? → You lose the exclusion entirely.
+            </Link>
+            <Link href="/2025-changes" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              What changed in 2025? → New $15M cap and tiered exclusions for new stock.
+            </Link>
+            <Link href="/dont-qualify" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              Don&apos;t qualify for QSBS? → Alternative strategies when the exclusion doesn&apos;t apply.
             </Link>
           </div>
         </section>

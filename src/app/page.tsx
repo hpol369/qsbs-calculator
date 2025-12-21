@@ -373,6 +373,10 @@ export default function Home() {
                 <h3 className="font-medium text-emerald-700 mb-1">What if I have to sell before 5 years?</h3>
                 <p className="text-sm text-gray-600">Section 1045 rollover and other strategies if you can&apos;t wait.</p>
               </Link>
+              <Link href="/stock-types" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 className="font-medium text-emerald-700 mb-1">ISOs vs RSUs vs restricted stock—which can be QSBS?</h3>
+                <p className="text-sm text-gray-600">Not all equity is equal. Know your type, know when your clock starts.</p>
+              </Link>
             </div>
           </section>
 

@@ -274,6 +274,12 @@ export default function SellingEarlyPage() {
             <Link href="/10-million-limit" className="block text-emerald-600 hover:text-emerald-700 font-medium">
               What&apos;s the $10M exclusion cap? → How much can you actually exclude.
             </Link>
+            <Link href="/dont-qualify" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              Don&apos;t qualify for QSBS? → Your other options for tax savings.
+            </Link>
+            <Link href="/2025-changes" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              2025 QSBS changes → Partial exclusions now available for newer stock.
+            </Link>
           </div>
         </section>
 

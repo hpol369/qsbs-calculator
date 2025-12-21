@@ -2,24 +2,25 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import Calculator from '@/components/Calculator';
+import DeadlineChecker from '@/components/DeadlineChecker';
 
 export const metadata: Metadata = {
-  title: "83(b) Election and QSBS: Start Your Clock Earlier",
-  description: "Filing an 83(b) election starts your QSBS holding period at grant instead of vesting—potentially years earlier. Here's how it works.",
+  title: "Did I Miss My 83(b) Deadline? Check Your QSBS Status",
+  description: "Check your 83(b) filing deadline—30 days, no exceptions. See how it affects your QSBS holding period and what to do if you missed it.",
   alternates: {
     canonical: '/83b-election',
   },
   openGraph: {
-    title: "83(b) Election and QSBS: Start Your Clock Earlier",
-    description: "Filing an 83(b) election starts your QSBS holding period at grant instead of vesting.",
+    title: "Did I Miss My 83(b) Deadline? Check Your QSBS Status",
+    description: "Check your 83(b) deadline and see how it affects your QSBS holding period.",
     url: 'https://www.qsbsguide.com/83b-election',
     siteName: 'QSBS Guide',
     type: 'article',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "83(b) Election and QSBS: Start Your Clock Earlier",
-    description: "Start your holding period years earlier with an 83(b).",
+    title: "Did I Miss My 83(b) Deadline?",
+    description: "Check your deadline and see how it affects QSBS.",
   },
 };
 
@@ -106,6 +107,9 @@ export default function Election83bPage() {
             Miss the 30-day window, and there&apos;s no second chance.
           </p>
         </div>
+
+        {/* Deadline Checker Tool */}
+        <DeadlineChecker />
 
         {/* The Timeline Difference */}
         <section className="bg-slate-800 text-white rounded-xl p-6 mb-8">

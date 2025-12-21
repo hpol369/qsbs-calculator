@@ -225,14 +225,20 @@ export default function HoldingPeriodPage() {
         <section className="bg-gray-100 rounded-xl p-6 mb-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Related Questions</h2>
           <div className="space-y-3">
+            <Link href="/stock-types" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              ISOs vs RSUs vs restricted stock → Which can be QSBS?
+            </Link>
             <Link href="/california" className="block text-emerald-600 hover:text-emerald-700 font-medium">
               Does California recognize QSBS? → No. Here&apos;s what you&apos;ll owe.
             </Link>
             <Link href="/iso-exercise" className="block text-emerald-600 hover:text-emerald-700 font-medium">
               ISO exercise date vs grant date → The #1 QSBS mistake explained.
             </Link>
-            <Link href="/methodology" className="block text-emerald-600 hover:text-emerald-700 font-medium">
-              Full QSBS methodology → How we calculate everything.
+            <Link href="/83b-election" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              83(b) election deadline → Check your 30-day deadline.
+            </Link>
+            <Link href="/dont-qualify" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              Don&apos;t qualify for QSBS? → Your options when the exclusion doesn&apos;t apply.
             </Link>
           </div>
         </section>
