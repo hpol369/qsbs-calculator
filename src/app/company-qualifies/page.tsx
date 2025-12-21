@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { BreadcrumbSchema, ArticleSchema, FAQSchema } from '@/components/SchemaMarkup';
 
 export const metadata: Metadata = {
   title: 'Does My Company Qualify for QSBS? | C-Corp Requirements Checklist',
@@ -14,16 +15,48 @@ export const metadata: Metadata = {
   },
 };
 
+const baseUrl = 'https://www.qsbsguide.com';
+
 export default function CompanyQualifiesPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        {/* Breadcrumb */}
-        <nav className="text-sm text-gray-500 mb-6">
-          <Link href="/" className="hover:text-gray-700">Calculator</Link>
-          <span className="mx-2">/</span>
-          <span className="text-gray-900">Company Requirements</span>
-        </nav>
+    <>
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: baseUrl },
+          { name: 'Company Requirements', url: `${baseUrl}/company-qualifies` },
+        ]}
+      />
+      <ArticleSchema
+        title="Does My Company Qualify for QSBS?"
+        description="QSBS requires your company to meet strict requirements: C-corp status, $50M assets test, active business, and more."
+        url={`${baseUrl}/company-qualifies`}
+        datePublished="2024-01-15"
+        dateModified="2024-12-01"
+      />
+      <FAQSchema
+        items={[
+          {
+            question: "Does my company need to be a C-corporation for QSBS?",
+            answer: "Yes. The company must be a domestic C-corporation at the time you acquire stock. S-corps, LLCs, partnerships, and foreign corporations do not qualify for QSBS treatment.",
+          },
+          {
+            question: "What is the $50 million assets test for QSBS?",
+            answer: "The company's gross assets must have been $50 million or less at all times from August 10, 1993, through immediately after your stock was issued. This is measured at issuance, not at sale.",
+          },
+          {
+            question: "Which businesses don't qualify for QSBS?",
+            answer: "Professional services (law, health, engineering, accounting, consulting, financial services), banking, insurance, farming, hotels, restaurants, and oil/gas extraction businesses do not qualify.",
+          },
+        ]}
+      />
+      <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <div className="max-w-4xl mx-auto px-4 py-12">
+          {/* Breadcrumb */}
+          <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-gray-700">Calculator</Link>
+            <span className="mx-2">/</span>
+            <span className="text-gray-900">Company Requirements</span>
+          </nav>
 
         {/* Header */}
         <header className="mb-8">
@@ -292,11 +325,12 @@ export default function CompanyQualifiesPage() {
           </div>
         </section>
 
-        {/* Citation */}
-        <footer className="text-sm text-gray-500 border-t border-gray-200 pt-6">
-          <p>Source: IRC §1202(c), §1202(e) — Qualified small business stock requirements</p>
-        </footer>
-      </div>
-    </main>
+          {/* Citation */}
+          <footer className="text-sm text-gray-500 border-t border-gray-200 pt-6">
+            <p>Source: IRC §1202(c), §1202(e) — Qualified small business stock requirements</p>
+          </footer>
+        </div>
+      </main>
+    </>
   );
 }
