@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
@@ -10,9 +11,54 @@ export const metadata: Metadata = {
   },
 };
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Does California recognize the federal QSBS exclusion?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. California does not conform to IRC Section 1202. If you are a California resident when you sell, you will owe state capital gains tax on the full gain—up to 13.3%—even if you qualify for the federal QSBS exclusion.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much California tax will I owe on QSBS gains?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'California taxes capital gains as ordinary income at rates up to 13.3%. On a $2M gain, you could owe roughly $266,000 to California even with zero federal tax.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I move out of California to avoid QSBS state taxes?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Relocation can work, but California aggressively audits people who move shortly before a sale. You need to establish genuine residency in another state—change your driver\'s license, voter registration, and establish real ties—ideally 12+ months before the sale.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Which other states do not recognize QSBS?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Besides California, Pennsylvania, Mississippi, and Alabama also do not conform to the federal QSBS exclusion. States with no income tax (Texas, Florida, Washington, Nevada, Wyoming, South Dakota, Alaska, Tennessee) have no state QSBS impact.',
+      },
+    },
+  ],
+};
+
 export default function CaliforniaPage() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <>
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <main className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -249,5 +295,6 @@ export default function CaliforniaPage() {
         </div>
       </footer>
     </main>
+    </>
   );
 }

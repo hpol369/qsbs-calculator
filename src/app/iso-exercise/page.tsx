@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
@@ -10,9 +11,54 @@ export const metadata: Metadata = {
   },
 };
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'When does the QSBS holding period start for ISOs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For incentive stock options (ISOs), the QSBS holding period starts on the date you exercise the options—not the grant date. Until you exercise, you own the right to buy stock, not actual shares.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is the QSBS holding period different for NSOs vs ISOs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. For QSBS holding period purposes, ISOs and NSOs work the same way—the clock starts at exercise for both. The ISO vs NSO distinction matters for other tax reasons (AMT, income treatment) but not for QSBS timing.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does early exercise affect my QSBS holding period?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, if you file an 83(b) election within 30 days. Early exercise with an 83(b) starts your holding period at the early exercise date, even though shares haven\'t vested. Without an 83(b), your holding period starts at vesting.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What happens if I sell QSBS before the 5-year holding period?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'If you sell before completing 5 years, you lose the entire QSBS exclusion. Even selling a few days early can cost hundreds of thousands of dollars in federal taxes. There is no partial exclusion for holding less than 5 years.',
+      },
+    },
+  ],
+};
+
 export default function ISOExercisePage() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <>
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <main className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -221,5 +267,6 @@ export default function ISOExercisePage() {
         </div>
       </footer>
     </main>
+    </>
   );
 }

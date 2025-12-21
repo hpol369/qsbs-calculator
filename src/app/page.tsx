@@ -27,9 +27,12 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-gray-900 mb-3">
             Find out if you&apos;re about to save $500K—or lose it.
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-2">
             Most founders don&apos;t check their QSBS status until they&apos;re 60 days from closing.
             By then it&apos;s too late to fix.
+          </p>
+          <p className="text-base text-gray-500">
+            Not sure when your 5-year clock started? Most people get it wrong.
           </p>
         </div>
 

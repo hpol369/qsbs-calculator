@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
@@ -10,9 +11,54 @@ export const metadata: Metadata = {
   },
 };
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'When does the QSBS holding period start for stock options?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For stock options (ISOs and NSOs), the QSBS holding period starts on the exercise date—not the grant date. You must hold actual shares, not just the right to buy shares.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'When does the QSBS holding period start for RSUs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For RSUs, the holding period starts when shares are delivered to you, which is typically the vesting date. RSUs cannot benefit from an 83(b) election.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does filing an 83(b) election affect my QSBS holding period?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. If you have restricted stock and file an 83(b) election within 30 days of grant, your holding period starts at the grant date. Without an 83(b), it starts at vesting.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long do I need to hold QSBS to qualify for the exclusion?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'You must hold the stock for at least 5 years from the date you acquired it to qualify for the full QSBS exclusion under Section 1202.',
+      },
+    },
+  ],
+};
+
 export default function HoldingPeriodPage() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <>
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <main className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -206,5 +252,6 @@ export default function HoldingPeriodPage() {
         </div>
       </footer>
     </main>
+    </>
   );
 }
