@@ -7,6 +7,7 @@ import { calculateAll, getQualificationDate } from '@/lib/calculations';
 import { decodeState } from '@/lib/url-state';
 import Results from './Results';
 import SavedScenariosPanel from './SavedScenariosPanel';
+import { CalculatorEvents, ConversionEvents } from '@/lib/analytics';
 
 const stockTypeOptions: { value: StockType; label: string }[] = [
   { value: 'common_stock', label: 'Common Stock' },
@@ -331,6 +332,19 @@ export default function Calculator() {
     setResults(calculationResults);
     setInputs(calcInputs);
     setShowResults(true);
+
+    // Track calculation event
+    CalculatorEvents.calculationCompleted({
+      stockType: calcInputs.stockType,
+      stateCode: calcInputs.stateCode,
+      isQualified: calculationResults.holdingPeriod.isQualified,
+      totalSavings: calculationResults.totalSavings,
+      federalSavings: calculationResults.federalTax.savings,
+      stateSavings: calculationResults.stateTax.savings,
+    });
+
+    // Track high-value calculations
+    ConversionEvents.highValueCalculation(calculationResults.totalSavings);
   };
 
   const handleReset = () => {

@@ -6,6 +6,7 @@ import type { CalculationResults, CalculatorInputs } from '@/lib/calculations';
 import { formatCurrency, formatDate, formatPercent } from '@/lib/calculations';
 import { generateShareableUrl, copyToClipboard } from '@/lib/url-state';
 import ScenarioComparison from './ScenarioComparison';
+import { CalculatorEvents, ConversionEvents } from '@/lib/analytics';
 
 interface ResultsProps {
   results: CalculationResults;
@@ -27,16 +28,24 @@ export default function Results({ results, inputs, onReset }: ResultsProps) {
     const success = await copyToClipboard(shareableUrl);
     if (success) {
       setCopied(true);
+      CalculatorEvents.resultCopied();
+      ConversionEvents.resultsShared();
       setTimeout(() => setCopied(false), 3000);
     }
   };
 
   const handleDownloadPdf = () => {
     setShowPdfMessage(true);
+    CalculatorEvents.pdfDownloaded();
     setTimeout(() => {
       window.print();
       setShowPdfMessage(false);
     }, 100);
+  };
+
+  const handleReset = () => {
+    CalculatorEvents.calculatorReset();
+    onReset();
   };
 
   const { holdingPeriod, exclusion, federalTax, stateTax } = results;
@@ -129,7 +138,7 @@ export default function Results({ results, inputs, onReset }: ResultsProps) {
             Download PDF
           </button>
           <button
-            onClick={onReset}
+            onClick={handleReset}
             className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
