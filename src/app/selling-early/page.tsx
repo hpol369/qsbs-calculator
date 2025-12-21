@@ -4,10 +4,22 @@ import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
-  title: "Selling QSBS Before 5 Years: Your Options | QSBS Calculator",
-  description: "If you have to sell your startup stock before completing the 5-year QSBS holding period, you have options: Section 1045 rollover or timing the deal. Here's what to know.",
+  title: "Selling QSBS Before 5 Years: Your Options",
+  description: "Selling before your 5-year QSBS holding period? You have options: Section 1045 rollover or timing the deal. Here's what you need to know.",
   alternates: {
     canonical: '/selling-early',
+  },
+  openGraph: {
+    title: "Selling QSBS Before 5 Years: Your Options",
+    description: "Section 1045 rollover, deal timing, and other strategies if you can't wait for QSBS qualification.",
+    url: 'https://www.qsbsguide.com/selling-early',
+    siteName: 'QSBS Guide',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Selling QSBS Before 5 Years: Your Options",
+    description: "Section 1045 rollover and other strategies.",
   },
 };
 
@@ -255,6 +267,9 @@ export default function SellingEarlyPage() {
             </Link>
             <Link href="/iso-exercise" className="block text-emerald-600 hover:text-emerald-700 font-medium">
               ISO exercise vs grant date → The timing that catches people off guard.
+            </Link>
+            <Link href="/83b-election" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              83(b) election timing → Could have started your clock earlier.
             </Link>
             <Link href="/10-million-limit" className="block text-emerald-600 hover:text-emerald-700 font-medium">
               What&apos;s the $10M exclusion cap? → How much can you actually exclude.

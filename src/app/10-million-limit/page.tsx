@@ -4,10 +4,22 @@ import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
-  title: "The QSBS $10 Million Exclusion Limit Explained | QSBS Calculator",
-  description: "QSBS allows you to exclude up to $10M or 10x your basis from capital gains tax. Here's how the cap works, when the 10x rule applies, and planning strategies.",
+  title: "The QSBS $10M/$15M Exclusion Limit Explained",
+  description: "QSBS allows you to exclude up to $10M (or $15M for post-July 2025 stock) or 10x your basis. Here's how the cap works.",
   alternates: {
     canonical: '/10-million-limit',
+  },
+  openGraph: {
+    title: "The QSBS $10M/$15M Exclusion Limit Explained",
+    description: "How the QSBS exclusion cap works, when the 10x rule applies, and planning strategies.",
+    url: 'https://www.qsbsguide.com/10-million-limit',
+    siteName: 'QSBS Guide',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "The QSBS $10M/$15M Exclusion Limit Explained",
+    description: "How the QSBS exclusion cap works.",
   },
 };
 

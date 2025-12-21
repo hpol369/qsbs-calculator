@@ -4,10 +4,22 @@ import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
-  title: "California QSBS Tax: Why You'll Still Owe the State | QSBS Calculator",
-  description: "California doesn't recognize the federal QSBS exclusion. You'll owe up to 13.3% state tax on your gains even if you qualify federally. Calculate your CA tax bill.",
+  title: "California QSBS Tax: Why You'll Still Owe the State",
+  description: "California doesn't recognize QSBS. You'll owe up to 13.3% state tax on gains even if you qualify federally. Calculate your CA tax bill.",
   alternates: {
     canonical: '/california',
+  },
+  openGraph: {
+    title: "California QSBS Tax: Why You'll Still Owe the State",
+    description: "California doesn't recognize QSBS. You'll owe up to 13.3% state tax even if you qualify federally.",
+    url: 'https://www.qsbsguide.com/california',
+    siteName: 'QSBS Guide',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "California QSBS Tax: Why You'll Still Owe the State",
+    description: "California doesn't recognize QSBS. Calculate your CA tax bill.",
   },
 };
 
@@ -100,7 +112,7 @@ export default function CaliforniaPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">How This Works</h2>
 
           <p className="text-gray-600 mb-4">
-            The federal QSBS exclusion (Section 1202) lets you exclude up to $10M in capital gains from qualified small business stock.
+            The federal QSBS exclusion (Section 1202) lets you exclude <Link href="/10-million-limit" className="text-emerald-600 hover:text-emerald-700">up to $10M in capital gains</Link> from qualified small business stock.
           </p>
 
           <p className="text-gray-600 mb-4">

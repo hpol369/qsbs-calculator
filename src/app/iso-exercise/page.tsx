@@ -4,10 +4,22 @@ import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
-  title: "ISO Holding Period for QSBS: It Starts at Exercise, Not Grant | QSBS Calculator",
-  description: "Your QSBS holding period for stock options starts when you exercise, not when options are granted. This is the #1 mistake that costs founders millions.",
+  title: "QSBS for ISOs: Your Clock Starts at Exercise, Not Grant",
+  description: "Your QSBS holding period for stock options starts when you exercise, not when granted. The #1 mistake that costs founders millions.",
   alternates: {
     canonical: '/iso-exercise',
+  },
+  openGraph: {
+    title: "QSBS for ISOs: Your Clock Starts at Exercise, Not Grant",
+    description: "Your QSBS holding period for stock options starts when you exercise, not when granted.",
+    url: 'https://www.qsbsguide.com/iso-exercise',
+    siteName: 'QSBS Guide',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "QSBS for ISOs: Starts at Exercise, Not Grant",
+    description: "The #1 mistake that costs founders millions.",
   },
 };
 
@@ -177,7 +189,7 @@ export default function ISOExercisePage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">What About Early Exercise?</h2>
 
           <p className="text-gray-600 mb-4">
-            If you early-exercised your options (bought shares before they vested), your holding period starts at the early exercise date—assuming you filed an 83(b) election within 30 days.
+            If you early-exercised your options (bought shares before they vested), your holding period starts at the early exercise date—assuming you <Link href="/83b-election" className="text-emerald-600 hover:text-emerald-700">filed an 83(b) election</Link> within 30 days.
           </p>
 
           <p className="text-gray-600 mb-4">

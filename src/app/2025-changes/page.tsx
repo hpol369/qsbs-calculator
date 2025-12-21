@@ -4,10 +4,22 @@ import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
-  title: "2025 QSBS Law Changes: OBBBA Expands Section 1202 Benefits | QSBS Calculator",
-  description: "The One Big Beautiful Bill Act (July 2025) expanded QSBS: $15M cap, partial exclusions at 3-4 years, $75M asset threshold. Here's what changed and who benefits.",
+  title: "2025 QSBS Law Changes: OBBBA Expands Section 1202",
+  description: "July 2025 OBBBA expanded QSBS: $15M cap, partial exclusions at 3-4 years, $75M asset threshold. What changed and who benefits.",
   alternates: {
     canonical: '/2025-changes',
+  },
+  openGraph: {
+    title: "2025 QSBS Law Changes: OBBBA Expands Section 1202",
+    description: "July 2025 OBBBA expanded QSBS: $15M cap, partial exclusions at 3-4 years, $75M threshold.",
+    url: 'https://www.qsbsguide.com/2025-changes',
+    siteName: 'QSBS Guide',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "2025 QSBS Law Changes: OBBBA Expands Section 1202",
+    description: "$15M cap, partial exclusions at 3-4 years. What changed.",
   },
 };
 

@@ -358,6 +358,14 @@ export default function Home() {
                 <h3 className="font-medium text-emerald-700 mb-1">Does QSBS start at grant or exercise?</h3>
                 <p className="text-sm text-gray-600">Exercise. This is the #1 mistake that costs people millions.</p>
               </Link>
+              <Link href="/83b-election" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 className="font-medium text-emerald-700 mb-1">How does an 83(b) election affect QSBS?</h3>
+                <p className="text-sm text-gray-600">It can start your clock years earlier. But you have 30 days to file—no exceptions.</p>
+              </Link>
+              <Link href="/10-million-limit" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 className="font-medium text-emerald-700 mb-1">What&apos;s the QSBS exclusion cap?</h3>
+                <p className="text-sm text-gray-600">$10M for pre-July 2025 stock, $15M for newer stock. Or 10× your basis if higher.</p>
+              </Link>
             </div>
           </section>
 

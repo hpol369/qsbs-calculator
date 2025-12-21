@@ -17,11 +17,20 @@ export const metadata: Metadata = {
     type: "website",
     url: baseUrl,
     siteName: "QSBS Guide",
+    images: [
+      {
+        url: `${baseUrl}/og-default.svg`,
+        width: 1200,
+        height: 630,
+        alt: "QSBS Calculator - Section 1202 Tax Savings",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "QSBS Calculator – Section 1202 Tax Savings",
     description: "Estimate your QSBS tax savings in 60 seconds.",
+    images: [`${baseUrl}/og-default.svg`],
   },
 };
 

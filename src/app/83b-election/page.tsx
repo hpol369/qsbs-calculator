@@ -4,10 +4,22 @@ import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
-  title: "83(b) Election and QSBS: Start Your Clock Earlier | QSBS Calculator",
-  description: "Filing an 83(b) election within 30 days of receiving restricted stock starts your QSBS holding period at grant, not vesting. Here's how it works and when it matters.",
+  title: "83(b) Election and QSBS: Start Your Clock Earlier",
+  description: "Filing an 83(b) election starts your QSBS holding period at grant instead of vesting—potentially years earlier. Here's how it works.",
   alternates: {
     canonical: '/83b-election',
+  },
+  openGraph: {
+    title: "83(b) Election and QSBS: Start Your Clock Earlier",
+    description: "Filing an 83(b) election starts your QSBS holding period at grant instead of vesting.",
+    url: 'https://www.qsbsguide.com/83b-election',
+    siteName: 'QSBS Guide',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "83(b) Election and QSBS: Start Your Clock Earlier",
+    description: "Start your holding period years earlier with an 83(b).",
   },
 };
 
@@ -308,6 +320,9 @@ export default function Election83bPage() {
             </Link>
             <Link href="/selling-early" className="block text-emerald-600 hover:text-emerald-700 font-medium">
               What if I have to sell before 5 years? → Your options explained.
+            </Link>
+            <Link href="/10-million-limit" className="block text-emerald-600 hover:text-emerald-700 font-medium">
+              What&apos;s the exclusion cap? → $10M or $15M depending on when you got stock.
             </Link>
           </div>
         </section>

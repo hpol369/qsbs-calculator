@@ -4,10 +4,22 @@ import Script from 'next/script';
 import Calculator from '@/components/Calculator';
 
 export const metadata: Metadata = {
-  title: 'When Does Your QSBS Holding Period Start? | QSBS Calculator',
-  description: 'Your QSBS holding period starts at exercise for options, vesting for RSUs, or grant if you filed an 83(b). Use our calculator to find your exact date.',
+  title: 'When Does Your QSBS Holding Period Start?',
+  description: 'Your QSBS holding period starts at exercise for options, vesting for RSUs, or grant if you filed an 83(b). Find your exact date.',
   alternates: {
     canonical: '/holding-period',
+  },
+  openGraph: {
+    title: 'When Does Your QSBS Holding Period Start?',
+    description: 'Your QSBS holding period starts at exercise for options, vesting for RSUs, or grant if you filed an 83(b).',
+    url: 'https://www.qsbsguide.com/holding-period',
+    siteName: 'QSBS Guide',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'When Does Your QSBS Holding Period Start?',
+    description: 'Find your exact QSBS qualification date based on your stock type.',
   },
 };
 
@@ -116,7 +128,7 @@ export default function HoldingPeriodPage() {
                   <td className="py-3 text-amber-700">Thinking it&apos;s the grant date</td>
                 </tr>
                 <tr className="border-b border-gray-100">
-                  <td className="py-3 pr-4 font-medium text-gray-900">Restricted stock with 83(b)</td>
+                  <td className="py-3 pr-4 font-medium text-gray-900"><Link href="/83b-election" className="text-emerald-600 hover:text-emerald-700">Restricted stock with 83(b)</Link></td>
                   <td className="py-3 pr-4">Grant date</td>
                   <td className="py-3 text-amber-700">Not filing the 83(b) in time</td>
                 </tr>
