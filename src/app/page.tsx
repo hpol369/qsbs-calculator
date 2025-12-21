@@ -319,6 +319,25 @@ export default function Home() {
             </div>
           </section>
 
+          {/* Common Questions - Links to Problem Pages */}
+          <section className="bg-slate-100 rounded-xl p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Common questions</h2>
+            <div className="space-y-4">
+              <Link href="/holding-period" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 className="font-medium text-emerald-700 mb-1">When does my QSBS holding period start?</h3>
+                <p className="text-sm text-gray-600">It depends on your stock type. Most people get this wrong—especially with options.</p>
+              </Link>
+              <Link href="/california" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 className="font-medium text-emerald-700 mb-1">Does California recognize QSBS?</h3>
+                <p className="text-sm text-gray-600">No. You&apos;ll owe 13.3% to California even if you owe the IRS nothing.</p>
+              </Link>
+              <Link href="/iso-exercise" className="block bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 className="font-medium text-emerald-700 mb-1">Does QSBS start at grant or exercise?</h3>
+                <p className="text-sm text-gray-600">Exercise. This is the #1 mistake that costs people millions.</p>
+              </Link>
+            </div>
+          </section>
+
         </div>
       </div>
 
