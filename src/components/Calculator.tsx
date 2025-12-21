@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useId } from 'react';
 import { sortedStates } from '@/lib/states';
 import type { CalculatorInputs, StockType, AcquisitionMethod, CalculationResults } from '@/lib/calculations';
-import { calculateAll } from '@/lib/calculations';
+import { calculateAll, getQualificationDate } from '@/lib/calculations';
 import { decodeState } from '@/lib/url-state';
 import Results from './Results';
 
@@ -38,10 +38,25 @@ function parseDateFromInput(value: string): Date | null {
   return isNaN(date.getTime()) ? null : date;
 }
 
+interface FormErrors {
+  costBasis?: string;
+  expectedValue?: string;
+  saleDate?: string;
+  exerciseDate?: string;
+  vestingDate?: string;
+  purchaseDate?: string;
+  conversionDate?: string;
+  grantDate?: string;
+  election83b?: string;
+}
+
 export default function Calculator() {
+  const formId = useId();
   const [showResults, setShowResults] = useState(false);
   const [results, setResults] = useState<CalculationResults | null>(null);
   const [inputs, setInputs] = useState<CalculatorInputs | null>(null);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   // Form state
   const [stockType, setStockType] = useState<StockType>('iso');
@@ -96,6 +111,97 @@ export default function Calculator() {
   const show83bElection = stockType === 'restricted_stock';
   const showAnyDateField = stockType !== 'inheritance';
 
+  // Calculate progress
+  const formProgress = useMemo(() => {
+    let required = 0;
+    let filled = 0;
+
+    // Always required
+    required += 3; // costBasis, expectedValue, saleDate
+    if (costBasis) filled++;
+    if (expectedValue) filled++;
+    if (saleDate) filled++;
+
+    // Conditional requirements
+    if (showExerciseDate) {
+      required++;
+      if (exerciseDate) filled++;
+    }
+    if (showVestingDate) {
+      required++;
+      if (vestingDate) filled++;
+    }
+    if (showPurchaseDate) {
+      required++;
+      if (purchaseDate) filled++;
+    }
+    if (showConversionDate) {
+      required++;
+      if (conversionDate) filled++;
+    }
+    if (show83bElection) {
+      required++;
+      if (election83b !== null) filled++;
+    }
+    if (stockType === 'restricted_stock' && election83b) {
+      required++;
+      if (grantDate) filled++;
+    }
+
+    return { filled, required, percent: required > 0 ? Math.round((filled / required) * 100) : 0 };
+  }, [stockType, election83b, costBasis, expectedValue, saleDate, exerciseDate, vestingDate, purchaseDate, conversionDate, grantDate, showExerciseDate, showVestingDate, showPurchaseDate, showConversionDate, show83bElection]);
+
+  // Calculate days until qualification preview
+  const qualificationPreview = useMemo(() => {
+    let startDate: Date | null = null;
+
+    if (stockType === 'inheritance') {
+      return { message: 'Inherited stock automatically qualifies', daysRemaining: 0, qualifies: true };
+    }
+
+    // Determine the holding period start date based on current inputs
+    if (stockType === 'iso' || stockType === 'nso') {
+      startDate = parseDateFromInput(exerciseDate);
+    } else if (stockType === 'restricted_stock') {
+      startDate = election83b ? parseDateFromInput(grantDate) : parseDateFromInput(vestingDate);
+    } else if (stockType === 'rsu') {
+      startDate = parseDateFromInput(vestingDate);
+    } else if (stockType === 'common_stock' || stockType === 'gift') {
+      startDate = parseDateFromInput(purchaseDate);
+    } else if (stockType === 'safe_conversion') {
+      startDate = parseDateFromInput(conversionDate);
+    }
+
+    if (!startDate) return null;
+
+    const qualDate = getQualificationDate(startDate);
+    if (!qualDate) return null;
+
+    const today = new Date();
+    const diffMs = qualDate.getTime() - today.getTime();
+    const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    if (daysRemaining <= 0) {
+      return { message: 'Your stock already qualifies for full QSBS exclusion!', daysRemaining: 0, qualifies: true };
+    }
+
+    const years = Math.floor(daysRemaining / 365);
+    const months = Math.floor((daysRemaining % 365) / 30);
+    const days = daysRemaining % 30;
+
+    let timeStr = '';
+    if (years > 0) timeStr += `${years}y `;
+    if (months > 0) timeStr += `${months}m `;
+    if (days > 0 && years === 0) timeStr += `${days}d`;
+
+    return {
+      message: `${timeStr.trim()} until full QSBS qualification`,
+      daysRemaining,
+      qualifies: false,
+      qualificationDate: qualDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+  }, [stockType, election83b, exerciseDate, vestingDate, purchaseDate, conversionDate, grantDate]);
+
   // Get helper text for dates
   const getDateHelperText = (): string | null => {
     switch (stockType) {
@@ -117,7 +223,94 @@ export default function Calculator() {
     }
   };
 
+  // Validation function
+  const validateForm = (): FormErrors => {
+    const newErrors: FormErrors = {};
+
+    if (!costBasis) {
+      newErrors.costBasis = 'Required—what did you pay for this stock?';
+    } else if (parseFloat(costBasis) < 0) {
+      newErrors.costBasis = 'Cost basis cannot be negative';
+    }
+
+    if (!expectedValue) {
+      newErrors.expectedValue = 'Required—what will your stock be worth at sale?';
+    } else if (parseFloat(expectedValue) < 0) {
+      newErrors.expectedValue = 'Sale value cannot be negative';
+    }
+
+    if (!saleDate) {
+      newErrors.saleDate = 'Required—when do you expect to sell?';
+    }
+
+    if (stockType === 'iso' || stockType === 'nso') {
+      if (!exerciseDate) {
+        newErrors.exerciseDate = 'Required—this is when your 5-year QSBS clock started';
+      }
+    }
+
+    if ((stockType === 'restricted_stock' && !election83b) || stockType === 'rsu') {
+      if (!vestingDate) {
+        newErrors.vestingDate = 'Required—your holding period starts at vesting';
+      }
+    }
+
+    if (stockType === 'restricted_stock' && election83b === true) {
+      if (!grantDate) {
+        newErrors.grantDate = 'Required—with 83(b), your clock starts at grant';
+      }
+    }
+
+    if (stockType === 'restricted_stock' && election83b === null) {
+      newErrors.election83b = 'Please select whether you filed an 83(b)—it affects your holding period';
+    }
+
+    if (stockType === 'common_stock' || stockType === 'gift') {
+      if (!purchaseDate) {
+        newErrors.purchaseDate = stockType === 'gift'
+          ? "Required—when did the donor acquire this stock?"
+          : 'Required—when did you purchase this stock?';
+      }
+    }
+
+    if (stockType === 'safe_conversion') {
+      if (!conversionDate) {
+        newErrors.conversionDate = 'Required—when did your SAFE convert to stock?';
+      }
+    }
+
+    return newErrors;
+  };
+
+  const handleBlur = (field: string) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    // Validate on blur
+    const newErrors = validateForm();
+    setErrors(newErrors);
+  };
+
   const handleCalculate = (overrideInputs?: CalculatorInputs) => {
+    // Validate before calculating
+    const newErrors = validateForm();
+    setErrors(newErrors);
+
+    // Mark all fields as touched
+    setTouched({
+      costBasis: true,
+      expectedValue: true,
+      saleDate: true,
+      exerciseDate: true,
+      vestingDate: true,
+      purchaseDate: true,
+      conversionDate: true,
+      grantDate: true,
+      election83b: true,
+    });
+
+    if (Object.keys(newErrors).length > 0 && !overrideInputs) {
+      return;
+    }
+
     const calcInputs: CalculatorInputs = overrideInputs || {
       stockType,
       acquisitionMethod,
@@ -127,7 +320,7 @@ export default function Calculator() {
       vestingDate: parseDateFromInput(vestingDate),
       purchaseDate: parseDateFromInput(purchaseDate),
       conversionDate: parseDateFromInput(conversionDate),
-      saleDate: parseDateFromInput(saleDate) || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // Default to 1 year from now
+      saleDate: parseDateFromInput(saleDate) || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       costBasis: parseFloat(costBasis) || 0,
       expectedValue: parseFloat(expectedValue) || 0,
       stateCode,
@@ -143,24 +336,15 @@ export default function Calculator() {
     setShowResults(false);
     setResults(null);
     setInputs(null);
-    // Clear URL params
+    setErrors({});
+    setTouched({});
     if (typeof window !== 'undefined') {
       window.history.replaceState({}, '', window.location.pathname);
     }
   };
 
   const isFormValid = (): boolean => {
-    // Check required fields based on stock type
-    if (!costBasis || !expectedValue || !saleDate) return false;
-
-    if (stockType === 'common_stock' && !purchaseDate) return false;
-    if ((stockType === 'iso' || stockType === 'nso') && !exerciseDate) return false;
-    if (stockType === 'restricted_stock' && !election83b && !vestingDate) return false;
-    if (stockType === 'restricted_stock' && election83b && !grantDate) return false;
-    if (stockType === 'rsu' && !vestingDate) return false;
-    if (stockType === 'safe_conversion' && !conversionDate) return false;
-
-    return true;
+    return Object.keys(validateForm()).length === 0;
   };
 
   if (showResults && results && inputs) {
@@ -170,27 +354,89 @@ export default function Calculator() {
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
       <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4">
-        <h2 className="text-xl font-semibold text-white">QSBS Savings Calculator</h2>
-        <p className="text-emerald-100 text-sm mt-1">Estimate your Section 1202 tax savings in 60 seconds</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-white">QSBS Savings Calculator</h2>
+            <p className="text-emerald-100 text-sm mt-1">Estimate your Section 1202 tax savings in 60 seconds</p>
+          </div>
+          {/* Progress indicator */}
+          <div className="hidden sm:flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-emerald-100 text-xs">{formProgress.filled} of {formProgress.required} fields</p>
+              <p className="text-white text-sm font-medium">{formProgress.percent}% complete</p>
+            </div>
+            <div className="w-12 h-12 relative">
+              <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                <path
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.3)"
+                  strokeWidth="3"
+                />
+                <path
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeDasharray={`${formProgress.percent}, 100`}
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="p-6 space-y-6">
+      {/* Qualification Preview Banner */}
+      {qualificationPreview && (
+        <div className={`px-6 py-3 ${qualificationPreview.qualifies ? 'bg-emerald-50 border-b border-emerald-200' : 'bg-blue-50 border-b border-blue-200'}`}>
+          <div className="flex items-center gap-2">
+            {qualificationPreview.qualifies ? (
+              <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            )}
+            <p className={`text-sm font-medium ${qualificationPreview.qualifies ? 'text-emerald-800' : 'text-blue-800'}`}>
+              {qualificationPreview.message}
+            </p>
+            {qualificationPreview.qualificationDate && (
+              <span className="text-xs text-blue-600 ml-auto">
+                Qualifies: {qualificationPreview.qualificationDate}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      <form
+        onSubmit={(e) => { e.preventDefault(); handleCalculate(); }}
+        className="p-6 space-y-6"
+        aria-label="QSBS Tax Savings Calculator"
+      >
         {/* Stock Information */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Your Stock</h3>
+        <fieldset className="space-y-4">
+          <legend className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2 w-full">
+            Your Stock
+          </legend>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="stockType" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor={`${formId}-stockType`} className="block text-sm font-medium text-gray-700 mb-1">
                 Stock Type
               </label>
               <select
-                id="stockType"
+                id={`${formId}-stockType`}
                 value={stockType}
                 onChange={(e) => {
                   setStockType(e.target.value as StockType);
                   setElection83b(null);
+                  setErrors({});
                 }}
+                aria-describedby={`${formId}-stockType-help`}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-gray-900"
               >
                 {stockTypeOptions.map((opt) => (
@@ -199,14 +445,17 @@ export default function Calculator() {
                   </option>
                 ))}
               </select>
+              <p id={`${formId}-stockType-help`} className="text-xs text-gray-500 mt-1">
+                Different stock types have different holding period rules
+              </p>
             </div>
 
             <div>
-              <label htmlFor="acquisitionMethod" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor={`${formId}-acquisitionMethod`} className="block text-sm font-medium text-gray-700 mb-1">
                 How Acquired
               </label>
               <select
-                id="acquisitionMethod"
+                id={`${formId}-acquisitionMethod`}
                 value={acquisitionMethod}
                 onChange={(e) => setAcquisitionMethod(e.target.value as AcquisitionMethod)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-gray-900"
@@ -222,32 +471,37 @@ export default function Calculator() {
 
           {/* 83(b) Election */}
           {show83bElection && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Did you file an 83(b) election?
-              </label>
-              <div className="flex gap-4">
-                <label className="flex items-center">
+            <div
+              className={`rounded-lg p-4 ${errors.election83b && touched.election83b ? 'bg-red-50 border border-red-300' : 'bg-amber-50 border border-amber-200'}`}
+              role="group"
+              aria-labelledby={`${formId}-election83b-label`}
+            >
+              <p id={`${formId}-election83b-label`} className="block text-sm font-medium text-gray-700 mb-2">
+                Did you file an 83(b) election? <span className="text-red-500" aria-hidden="true">*</span>
+              </p>
+              <div className="flex gap-4" role="radiogroup" aria-required="true">
+                <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
                     name="election83b"
                     checked={election83b === true}
-                    onChange={() => setElection83b(true)}
+                    onChange={() => { setElection83b(true); setErrors(prev => ({ ...prev, election83b: undefined })); }}
                     className="mr-2 text-emerald-600 focus:ring-emerald-500"
+                    aria-describedby={`${formId}-election83b-desc`}
                   />
                   <span className="text-sm">Yes</span>
                 </label>
-                <label className="flex items-center">
+                <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
                     name="election83b"
                     checked={election83b === false}
-                    onChange={() => setElection83b(false)}
+                    onChange={() => { setElection83b(false); setErrors(prev => ({ ...prev, election83b: undefined })); }}
                     className="mr-2 text-emerald-600 focus:ring-emerald-500"
                   />
                   <span className="text-sm">No</span>
                 </label>
-                <label className="flex items-center">
+                <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
                     name="election83b"
@@ -258,20 +512,27 @@ export default function Calculator() {
                   <span className="text-sm">Not sure</span>
                 </label>
               </div>
-              <p className="text-xs text-amber-700 mt-2">
+              <p id={`${formId}-election83b-desc`} className="text-xs text-amber-700 mt-2">
                 An 83(b) election, filed within 30 days of grant, starts your holding period earlier.
               </p>
+              {errors.election83b && touched.election83b && (
+                <p className="text-sm text-red-600 mt-2" role="alert">
+                  {errors.election83b}
+                </p>
+              )}
             </div>
           )}
-        </div>
+        </fieldset>
 
         {/* Key Dates */}
         {showAnyDateField && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Key Dates</h3>
+          <fieldset className="space-y-4">
+            <legend className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2 w-full">
+              Key Dates
+            </legend>
 
             {getDateHelperText() && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3" role="note">
                 <p className="text-sm text-blue-800">{getDateHelperText()}</p>
               </div>
             )}
@@ -279,151 +540,254 @@ export default function Calculator() {
             <div className="grid md:grid-cols-2 gap-4">
               {showGrantDate && (
                 <div>
-                  <label htmlFor="grantDate" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor={`${formId}-grantDate`} className="block text-sm font-medium text-gray-700 mb-1">
                     Grant Date
+                    {stockType === 'restricted_stock' && election83b && <span className="text-red-500" aria-hidden="true"> *</span>}
                   </label>
                   <input
                     type="date"
-                    id="grantDate"
+                    id={`${formId}-grantDate`}
                     value={grantDate}
                     onChange={(e) => setGrantDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    onBlur={() => handleBlur('grantDate')}
+                    aria-required={stockType === 'restricted_stock' && election83b === true}
+                    aria-invalid={errors.grantDate && touched.grantDate ? 'true' : undefined}
+                    aria-describedby={errors.grantDate && touched.grantDate ? `${formId}-grantDate-error` : undefined}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                      errors.grantDate && touched.grantDate ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    }`}
                   />
+                  {errors.grantDate && touched.grantDate && (
+                    <p id={`${formId}-grantDate-error`} className="text-sm text-red-600 mt-1" role="alert">
+                      {errors.grantDate}
+                    </p>
+                  )}
                 </div>
               )}
 
               {showExerciseDate && (
                 <div>
-                  <label htmlFor="exerciseDate" className="block text-sm font-medium text-gray-700 mb-1">
-                    Exercise Date <span className="text-red-500">*</span>
+                  <label htmlFor={`${formId}-exerciseDate`} className="block text-sm font-medium text-gray-700 mb-1">
+                    Exercise Date <span className="text-red-500" aria-hidden="true">*</span>
                   </label>
                   <input
                     type="date"
-                    id="exerciseDate"
+                    id={`${formId}-exerciseDate`}
                     value={exerciseDate}
                     onChange={(e) => setExerciseDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    onBlur={() => handleBlur('exerciseDate')}
+                    aria-required="true"
+                    aria-invalid={errors.exerciseDate && touched.exerciseDate ? 'true' : undefined}
+                    aria-describedby={`${formId}-exerciseDate-help ${errors.exerciseDate && touched.exerciseDate ? `${formId}-exerciseDate-error` : ''}`}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                      errors.exerciseDate && touched.exerciseDate ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    }`}
                   />
+                  <p id={`${formId}-exerciseDate-help`} className="text-xs text-gray-500 mt-1">
+                    When you paid to convert options to shares
+                  </p>
+                  {errors.exerciseDate && touched.exerciseDate && (
+                    <p id={`${formId}-exerciseDate-error`} className="text-sm text-red-600 mt-1" role="alert">
+                      {errors.exerciseDate}
+                    </p>
+                  )}
                 </div>
               )}
 
               {showVestingDate && (
                 <div>
-                  <label htmlFor="vestingDate" className="block text-sm font-medium text-gray-700 mb-1">
-                    Vesting Date <span className="text-red-500">*</span>
+                  <label htmlFor={`${formId}-vestingDate`} className="block text-sm font-medium text-gray-700 mb-1">
+                    Vesting Date <span className="text-red-500" aria-hidden="true">*</span>
                   </label>
                   <input
                     type="date"
-                    id="vestingDate"
+                    id={`${formId}-vestingDate`}
                     value={vestingDate}
                     onChange={(e) => setVestingDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    onBlur={() => handleBlur('vestingDate')}
+                    aria-required="true"
+                    aria-invalid={errors.vestingDate && touched.vestingDate ? 'true' : undefined}
+                    aria-describedby={errors.vestingDate && touched.vestingDate ? `${formId}-vestingDate-error` : undefined}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                      errors.vestingDate && touched.vestingDate ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    }`}
                   />
+                  {errors.vestingDate && touched.vestingDate && (
+                    <p id={`${formId}-vestingDate-error`} className="text-sm text-red-600 mt-1" role="alert">
+                      {errors.vestingDate}
+                    </p>
+                  )}
                 </div>
               )}
 
               {showPurchaseDate && (
                 <div>
-                  <label htmlFor="purchaseDate" className="block text-sm font-medium text-gray-700 mb-1">
-                    {stockType === 'gift' ? "Donor's Acquisition Date" : 'Purchase Date'} <span className="text-red-500">*</span>
+                  <label htmlFor={`${formId}-purchaseDate`} className="block text-sm font-medium text-gray-700 mb-1">
+                    {stockType === 'gift' ? "Donor's Acquisition Date" : 'Purchase Date'} <span className="text-red-500" aria-hidden="true">*</span>
                   </label>
                   <input
                     type="date"
-                    id="purchaseDate"
+                    id={`${formId}-purchaseDate`}
                     value={purchaseDate}
                     onChange={(e) => setPurchaseDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    onBlur={() => handleBlur('purchaseDate')}
+                    aria-required="true"
+                    aria-invalid={errors.purchaseDate && touched.purchaseDate ? 'true' : undefined}
+                    aria-describedby={errors.purchaseDate && touched.purchaseDate ? `${formId}-purchaseDate-error` : undefined}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                      errors.purchaseDate && touched.purchaseDate ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    }`}
                   />
+                  {errors.purchaseDate && touched.purchaseDate && (
+                    <p id={`${formId}-purchaseDate-error`} className="text-sm text-red-600 mt-1" role="alert">
+                      {errors.purchaseDate}
+                    </p>
+                  )}
                 </div>
               )}
 
               {showConversionDate && (
                 <div>
-                  <label htmlFor="conversionDate" className="block text-sm font-medium text-gray-700 mb-1">
-                    Conversion Date <span className="text-red-500">*</span>
+                  <label htmlFor={`${formId}-conversionDate`} className="block text-sm font-medium text-gray-700 mb-1">
+                    Conversion Date <span className="text-red-500" aria-hidden="true">*</span>
                   </label>
                   <input
                     type="date"
-                    id="conversionDate"
+                    id={`${formId}-conversionDate`}
                     value={conversionDate}
                     onChange={(e) => setConversionDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    onBlur={() => handleBlur('conversionDate')}
+                    aria-required="true"
+                    aria-invalid={errors.conversionDate && touched.conversionDate ? 'true' : undefined}
+                    aria-describedby={errors.conversionDate && touched.conversionDate ? `${formId}-conversionDate-error` : undefined}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                      errors.conversionDate && touched.conversionDate ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    }`}
                   />
+                  {errors.conversionDate && touched.conversionDate && (
+                    <p id={`${formId}-conversionDate-error`} className="text-sm text-red-600 mt-1" role="alert">
+                      {errors.conversionDate}
+                    </p>
+                  )}
                 </div>
               )}
 
               <div>
-                <label htmlFor="saleDate" className="block text-sm font-medium text-gray-700 mb-1">
-                  Expected Sale Date <span className="text-red-500">*</span>
+                <label htmlFor={`${formId}-saleDate`} className="block text-sm font-medium text-gray-700 mb-1">
+                  Expected Sale Date <span className="text-red-500" aria-hidden="true">*</span>
                 </label>
                 <input
                   type="date"
-                  id="saleDate"
+                  id={`${formId}-saleDate`}
                   value={saleDate}
                   onChange={(e) => setSaleDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  onBlur={() => handleBlur('saleDate')}
+                  aria-required="true"
+                  aria-invalid={errors.saleDate && touched.saleDate ? 'true' : undefined}
+                  aria-describedby={`${formId}-saleDate-help ${errors.saleDate && touched.saleDate ? `${formId}-saleDate-error` : ''}`}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                    errors.saleDate && touched.saleDate ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                  }`}
                 />
+                <p id={`${formId}-saleDate-help`} className="text-xs text-gray-500 mt-1">
+                  When you expect to sell (exit, IPO, secondary, etc.)
+                </p>
+                {errors.saleDate && touched.saleDate && (
+                  <p id={`${formId}-saleDate-error`} className="text-sm text-red-600 mt-1" role="alert">
+                    {errors.saleDate}
+                  </p>
+                )}
               </div>
             </div>
-          </div>
+          </fieldset>
         )}
 
         {/* Value */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Value</h3>
+        <fieldset className="space-y-4">
+          <legend className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2 w-full">
+            Value
+          </legend>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="costBasis" className="block text-sm font-medium text-gray-700 mb-1">
-                Cost Basis <span className="text-red-500">*</span>
+              <label htmlFor={`${formId}-costBasis`} className="block text-sm font-medium text-gray-700 mb-1">
+                Cost Basis <span className="text-red-500" aria-hidden="true">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <span className="absolute left-3 top-2 text-gray-500" aria-hidden="true">$</span>
                 <input
                   type="number"
-                  id="costBasis"
+                  id={`${formId}-costBasis`}
                   value={costBasis}
                   onChange={(e) => setCostBasis(e.target.value)}
+                  onBlur={() => handleBlur('costBasis')}
                   placeholder="50,000"
                   min="0"
-                  className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  aria-required="true"
+                  aria-invalid={errors.costBasis && touched.costBasis ? 'true' : undefined}
+                  aria-describedby={`${formId}-costBasis-help ${errors.costBasis && touched.costBasis ? `${formId}-costBasis-error` : ''}`}
+                  className={`w-full pl-7 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                    errors.costBasis && touched.costBasis ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                  }`}
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">What you paid, or the value included in your income</p>
+              <p id={`${formId}-costBasis-help`} className="text-xs text-gray-500 mt-1">
+                What you paid, or the value included in your income
+              </p>
+              {errors.costBasis && touched.costBasis && (
+                <p id={`${formId}-costBasis-error`} className="text-sm text-red-600 mt-1" role="alert">
+                  {errors.costBasis}
+                </p>
+              )}
             </div>
 
             <div>
-              <label htmlFor="expectedValue" className="block text-sm font-medium text-gray-700 mb-1">
-                Expected Sale Value <span className="text-red-500">*</span>
+              <label htmlFor={`${formId}-expectedValue`} className="block text-sm font-medium text-gray-700 mb-1">
+                Expected Sale Value <span className="text-red-500" aria-hidden="true">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <span className="absolute left-3 top-2 text-gray-500" aria-hidden="true">$</span>
                 <input
                   type="number"
-                  id="expectedValue"
+                  id={`${formId}-expectedValue`}
                   value={expectedValue}
                   onChange={(e) => setExpectedValue(e.target.value)}
+                  onBlur={() => handleBlur('expectedValue')}
                   placeholder="2,000,000"
                   min="0"
-                  className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  aria-required="true"
+                  aria-invalid={errors.expectedValue && touched.expectedValue ? 'true' : undefined}
+                  aria-describedby={errors.expectedValue && touched.expectedValue ? `${formId}-expectedValue-error` : undefined}
+                  className={`w-full pl-7 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                    errors.expectedValue && touched.expectedValue ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                  }`}
                 />
               </div>
+              {errors.expectedValue && touched.expectedValue && (
+                <p id={`${formId}-expectedValue-error`} className="text-sm text-red-600 mt-1" role="alert">
+                  {errors.expectedValue}
+                </p>
+              )}
             </div>
           </div>
-        </div>
+        </fieldset>
 
         {/* Location */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Your Location</h3>
+        <fieldset className="space-y-4">
+          <legend className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2 w-full">
+            Your Location
+          </legend>
 
           <div className="max-w-md">
-            <label htmlFor="stateCode" className="block text-sm font-medium text-gray-700 mb-1">
-              State of Residence <span className="text-red-500">*</span>
+            <label htmlFor={`${formId}-stateCode`} className="block text-sm font-medium text-gray-700 mb-1">
+              State of Residence <span className="text-red-500" aria-hidden="true">*</span>
             </label>
             <select
-              id="stateCode"
+              id={`${formId}-stateCode`}
               value={stateCode}
               onChange={(e) => setStateCode(e.target.value)}
+              aria-required="true"
+              aria-describedby={`${formId}-stateCode-help`}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-gray-900"
             >
               {sortedStates.map((state) => (
@@ -432,21 +796,31 @@ export default function Calculator() {
                 </option>
               ))}
             </select>
-            <p className="text-xs text-gray-500 mt-1">Your state at time of sale determines tax treatment</p>
+            <p id={`${formId}-stateCode-help`} className="text-xs text-gray-500 mt-1">
+              Your state at time of sale determines tax treatment
+            </p>
           </div>
-        </div>
+        </fieldset>
 
         {/* Calculate Button */}
         <div className="pt-4">
           <button
-            onClick={() => handleCalculate()}
-            disabled={!isFormValid()}
-            className="w-full bg-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-200 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            type="submit"
+            className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors focus:ring-4 focus:ring-emerald-200 ${
+              isFormValid()
+                ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                : 'bg-emerald-600 text-white hover:bg-emerald-700'
+            }`}
           >
             Calculate My QSBS Savings
           </button>
+          {Object.keys(errors).length > 0 && Object.keys(touched).length > 0 && (
+            <p className="text-sm text-red-600 text-center mt-2" role="alert">
+              Please fix the errors above to calculate your savings
+            </p>
+          )}
         </div>
-      </div>
+      </form>
     </div>
   );
 }
