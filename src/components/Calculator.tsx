@@ -191,7 +191,7 @@ export default function Calculator() {
                   setStockType(e.target.value as StockType);
                   setElection83b(null);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-gray-900"
               >
                 {stockTypeOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -209,7 +209,7 @@ export default function Calculator() {
                 id="acquisitionMethod"
                 value={acquisitionMethod}
                 onChange={(e) => setAcquisitionMethod(e.target.value as AcquisitionMethod)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-gray-900"
               >
                 {acquisitionMethodOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -424,7 +424,7 @@ export default function Calculator() {
               id="stateCode"
               value={stateCode}
               onChange={(e) => setStateCode(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-gray-900"
             >
               {sortedStates.map((state) => (
                 <option key={state.code} value={state.code}>
