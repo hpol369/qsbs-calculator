@@ -383,8 +383,62 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Legal Sources - Trust Signals */}
+      <section className="max-w-4xl mx-auto px-4 mt-8 print:hidden">
+        <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-700 mb-3">Legal Sources & References</h3>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <p className="text-slate-600 mb-2">Primary IRC sections:</p>
+              <ul className="space-y-1">
+                <li>
+                  <a href="https://www.law.cornell.edu/uscode/text/26/1202" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    IRC §1202 — QSBS exclusion rules
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.law.cornell.edu/uscode/text/26/1045" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    IRC §1045 — Rollover provisions
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.law.cornell.edu/uscode/text/26/83" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    IRC §83(b) — Property transfers
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-slate-600 mb-2">Recent law changes:</p>
+              <ul className="space-y-1">
+                <li>
+                  <a href="https://www.congress.gov/bill/119th-congress/house-bill/1" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    OBBBA 2025 — New partial exclusions
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+              <p className="text-slate-500 text-xs mt-3">
+                Last verified: December 2025
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer - With operator attribution */}
-      <footer className="bg-white border-t border-gray-200 mt-12 print:hidden">
+      <footer className="bg-white border-t border-gray-200 mt-8 print:hidden">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="text-center text-sm text-gray-500 space-y-2">
             <p>
@@ -395,7 +449,7 @@ export default function Home() {
               Not tax, legal, or financial advice.
             </p>
             <p className="text-gray-400">
-              © {new Date().getFullYear()} QSBS Calculator · <Link href="/methodology" className="hover:text-gray-600">Methodology</Link>
+              © {new Date().getFullYear()} QSBS Calculator · <Link href="/methodology" className="hover:text-gray-600">Methodology</Link> · <Link href="/company-qualifies" className="hover:text-gray-600">Company Requirements</Link> · <Link href="/1045-rollover" className="hover:text-gray-600">Section 1045</Link>
             </p>
           </div>
         </div>
