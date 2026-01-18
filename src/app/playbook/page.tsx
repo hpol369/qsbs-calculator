@@ -165,6 +165,28 @@ export default function PlaybookPage() {
                         </div>
                     </Link>
 
+                    {/* Card 7: Founder Stack (Affiliate) */}
+                    <Link href="/playbook/founder-stack" className="group flex flex-col bg-slate-900 rounded-xl shadow-lg border border-slate-700 overflow-hidden hover:shadow-2xl transition-all hover:-translate-y-1 ring-1 ring-white/10">
+                        <div className="h-2 bg-gradient-to-r from-emerald-400 to-emerald-600" />
+                        <div className="p-6 flex-1">
+                            <div className="flex items-center gap-2 mb-3">
+                                <span className="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-2 py-1 rounded border border-emerald-500/20">TOOLS</span>
+                                <span className="text-slate-400 text-xs">Recommended</span>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors font-display">
+                                The Founder Stack
+                            </h3>
+                            <p className="text-slate-300 text-sm leading-relaxed">
+                                The exact banking, legal, and cap table setup you need to ensure your stock remains QSBS qualified.
+                            </p>
+                        </div>
+                        <div className="px-6 py-4 border-t border-slate-800 bg-slate-800/50 group-hover:bg-slate-800 transition-colors">
+                            <span className="text-emerald-400 font-semibold text-sm flex items-center">
+                                View stack <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                            </span>
+                        </div>
+                    </Link>
+
                 </div>
 
                 {/* Lead Magnet / CTA Section */}
