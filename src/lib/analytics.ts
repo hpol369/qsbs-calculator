@@ -171,6 +171,20 @@ export const ConversionEvents = {
       });
     }
   },
+
+  // User clicked find advisor CTA
+  clickFindAdvisor: (source: string) =>
+    trackEvent('click_find_advisor', {
+      event_category: 'conversion',
+      source: source,
+    }),
+
+  // User submitted lead form
+  submitLeadForm: (leadId: string) =>
+    trackEvent('submit_lead_form', {
+      event_category: 'conversion',
+      lead_id: leadId,
+    }),
 };
 
 // User timing for performance tracking

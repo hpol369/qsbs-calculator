@@ -1,12 +1,12 @@
-'use client';
-
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useReactToPrint } from 'react-to-print';
 import type { CalculationResults, CalculatorInputs } from '@/lib/calculations';
 import { formatCurrency, formatDate, formatPercent } from '@/lib/calculations';
 import { generateShareableUrl, copyToClipboard } from '@/lib/url-state';
 import ScenarioComparison from './ScenarioComparison';
 import { CalculatorEvents, ConversionEvents } from '@/lib/analytics';
+import HighStakesAlert from '@/components/HighStakesAlert';
 
 interface ResultsProps {
   results: CalculationResults;
@@ -34,14 +34,17 @@ export default function Results({ results, inputs, onReset }: ResultsProps) {
     }
   };
 
-  const handleDownloadPdf = () => {
-    setShowPdfMessage(true);
-    CalculatorEvents.pdfDownloaded();
-    setTimeout(() => {
-      window.print();
-      setShowPdfMessage(false);
-    }, 100);
-  };
+  const handleDownloadPdf = useReactToPrint({
+    contentRef: resultsRef,
+    documentTitle: 'QSBS-Assessment-Report',
+    onBeforePrint: () => {
+      CalculatorEvents.pdfDownloaded();
+      return Promise.resolve();
+    },
+    onAfterPrint: () => {
+      // Optional: Reset any print specific states if needed
+    }
+  });
 
   const handleReset = () => {
     CalculatorEvents.calculatorReset();
@@ -94,6 +97,8 @@ export default function Results({ results, inputs, onReset }: ResultsProps) {
         </div>
       </div>
 
+      <HighStakesAlert savings={results.totalSavings} />
+
       {/* PROMINENT SHARE BOX - The viral loop */}
       <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-5 print:hidden">
         <div className="flex items-start gap-3 mb-4">
@@ -117,11 +122,10 @@ export default function Results({ results, inputs, onReset }: ResultsProps) {
           />
           <button
             onClick={handleShare}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              copied
-                ? 'bg-emerald-600 text-white'
-                : 'bg-slate-900 text-white hover:bg-slate-800'
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${copied
+              ? 'bg-emerald-600 text-white'
+              : 'bg-slate-900 text-white hover:bg-slate-800'
+              }`}
           >
             {copied ? '✓ Copied!' : 'Copy Link'}
           </button>

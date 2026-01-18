@@ -67,6 +67,29 @@ export default function Home() {
           </p>
         </div>
 
+        {/* High Stakes Teaser - Monetization Hook */}
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-1 mb-6 print:hidden">
+          <div className="bg-slate-900 rounded-lg p-5 flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-700/50">
+            <div className="flex items-start gap-3">
+              <div className="p-2 bg-emerald-500/10 rounded-lg">
+                <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="text-left">
+                <h3 className="font-bold text-white text-base">Projecting $500k+ in savings?</h3>
+                <p className="text-slate-400 text-sm">Don&apos;t risk an IRS audit. Secure your exclusion with a formal opinion.</p>
+              </div>
+            </div>
+            <Link
+              href="/find-advisor"
+              className="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-lg transition-all text-center whitespace-nowrap"
+            >
+              Find a QSBS Expert
+            </Link>
+          </div>
+        </div>
+
         {/* Calculator */}
         <Calculator />
 

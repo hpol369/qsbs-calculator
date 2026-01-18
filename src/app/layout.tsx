@@ -103,6 +103,25 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <GoogleAnalytics />
+        <nav className="bg-white border-b border-gray-200 print:hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16">
+              <div className="flex">
+                <a href="/" className="flex-shrink-0 flex items-center font-bold text-xl text-emerald-900">
+                  QSBS Guide
+                </a>
+              </div>
+              <div className="flex items-center">
+                <a
+                  href="/find-advisor"
+                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                >
+                  Find an Advisor
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
         {children}
       </body>
     </html>
