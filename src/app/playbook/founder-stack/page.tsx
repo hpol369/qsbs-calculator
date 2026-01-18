@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "The QSBS Founder Stack | Tools for Tax-Free Exits",
-    description: "Curated list of QSBS-compliant tools for startups. Cap table management, banking, and legal infrastructure to protect your Section 1202 exclusion.",
+    title: "Startup Tools for QSBS Documentation | Cap Table, Banking, Formation",
+    description: "Tools that help startups maintain proper documentation for Section 1202 QSBS qualification: cap table management, banking, and legal formation.",
 };
 
 export default function FounderStackPage() {
@@ -12,13 +12,13 @@ export default function FounderStackPage() {
             {/* Header */}
             <div className="bg-slate-900 text-white pt-32 pb-24 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto text-center">
-                    <p className="text-emerald-400 font-bold tracking-wide uppercase text-sm mb-3">INFRASTRUCTURE</p>
+                    <p className="text-emerald-400 font-bold tracking-wide uppercase text-sm mb-3">TOOLS</p>
                     <h1 className="text-4xl sm:text-5xl font-display font-medium tracking-tight mb-6">
                         The <span className="text-emerald-400">Founder Stack</span>
                     </h1>
                     <p className="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                        QSBS compliance isn't just about the exit. It's about the paperwork you generate 5 years prior.
-                        Here are the tools we recommend to keep your exclusion safe.
+                        Proper documentation is essential for demonstrating QSBS qualification.
+                        These tools help startups maintain accurate records of stock issuances, holding periods, and corporate structure.
                     </p>
                 </div>
             </div>
@@ -37,12 +37,12 @@ export default function FounderStackPage() {
                             <span className="bg-purple-100 text-purple-800 text-xs font-bold px-2.5 py-0.5 rounded-full">CAP TABLE</span>
                         </div>
                         <p className="text-slate-600 text-lg mb-6 leading-relaxed">
-                            <strong>Why for QSBS?</strong> Pulley is the only cap table that natively tracks QSBS holding periods for every shareholder.
-                            If you mess up your 83(b) or exercise dates here, no lawyer can save you. Pulley prevents those errors.
+                            <strong>Why for QSBS?</strong> Cap table software tracks stock issuances, exercise dates, and 83(b) elections—all critical data points for determining QSBS holding periods.
+                            Pulley is designed for startups and integrates with standard equity workflows.
                         </p>
                         <div className="flex flex-wrap gap-4">
                             <a href="https://pulley.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700">
-                                Get Pulley (20% Off)
+                                Visit Pulley
                             </a>
                             <Link href="/iso-exercise" className="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-slate-700 bg-white hover:bg-gray-50">
                                 Read: ISO Exercises
@@ -80,8 +80,8 @@ export default function FounderStackPage() {
                             <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-full">BANKING</span>
                         </div>
                         <p className="text-slate-600 text-lg mb-6 leading-relaxed">
-                            <strong>Why for QSBS?</strong> When you exit, you need a safe place to park $10M+ that isn't a single point of failure.
-                            Mercury's Vault offering ($5M FDIC insurance) and Treasury products are the standard for post-exit liquidity.
+                            <strong>Why for QSBS?</strong> Mercury provides banking services designed for startups, with features like multi-account management and treasury services.
+                            Good financial infrastructure helps maintain clean records throughout the company&apos;s lifecycle.
                         </p>
                         <div className="flex flex-wrap gap-4">
                             <a href="https://mercury.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
@@ -94,15 +94,15 @@ export default function FounderStackPage() {
                         <ul className="space-y-3">
                             <li className="flex items-start text-slate-600">
                                 <svg className="w-5 h-5 text-green-500 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                High-Yield Treasury Mgmt
+                                Startup Banking
                             </li>
                             <li className="flex items-start text-slate-600">
                                 <svg className="w-5 h-5 text-green-500 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Venture Debt
+                                Treasury Management
                             </li>
                             <li className="flex items-start text-slate-600">
                                 <svg className="w-5 h-5 text-green-500 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                $5M FDIC Insurance
+                                Corporate Cards
                             </li>
                         </ul>
                     </div>
@@ -120,8 +120,8 @@ export default function FounderStackPage() {
                             <span className="bg-slate-100 text-slate-800 text-xs font-bold px-2.5 py-0.5 rounded-full">FORMATION</span>
                         </div>
                         <p className="text-slate-600 text-lg mb-6 leading-relaxed">
-                            <strong>Why for QSBS?</strong> 90% of QSBS failures happen at incorporation.
-                            Clerky ensures you are an 83(b)-filing C-Corp from Day 1. Do not use generic legal sites for a high-growth startup.
+                            <strong>Why for QSBS?</strong> QSBS requires stock to be issued by a domestic C-Corporation.
+                            Clerky specializes in Delaware C-Corp formation and handles founder stock issuance with proper documentation, including 83(b) election paperwork.
                         </p>
                         <div className="flex flex-wrap gap-4">
                             <a href="https://clerky.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-slate-800 hover:bg-slate-700">
@@ -153,7 +153,8 @@ export default function FounderStackPage() {
 
                 <div className="mt-12 text-center">
                     <p className="text-slate-500 text-sm">
-                        Disclaimer: Some links may be affiliate links. We only recommend tools that are legally rigorous enough for QSBS protection.
+                        Disclaimer: Some links may be affiliate links. These tools can help with documentation but do not guarantee QSBS qualification.
+                        Consult a tax professional for advice specific to your situation.
                     </p>
                     <div className="mt-8">
                         <Link href="/playbook" className="text-emerald-600 font-bold hover:text-emerald-500 transition-colors">

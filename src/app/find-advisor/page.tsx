@@ -86,14 +86,14 @@ export default function FindAdvisorPage() {
                     <div className="space-y-8">
                         <div>
                             <span className="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-800 font-bold rounded-full text-sm mb-6 tracking-wide uppercase">
-                                Audit Defense & Opinions
+                                QSBS Tax Specialists
                             </span>
                             <h1 className="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
-                                Secure Your QSBS Exclusion with an Expert Opinion.
+                                Get Connected with a Section 1202 Expert
                             </h1>
                             <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                                Section 1202 is the single most valuable tax break in the US Code.
-                                Don&apos;t risk your $10M+ tax-free exit on a DIY calculation.
+                                QSBS rules are complex. The holding period calculation alone involves IRC Section 1202, 1223, and 83(b) interactions.
+                                Work with an advisor who specializes in qualified small business stock.
                             </p>
                         </div>
 
@@ -105,8 +105,8 @@ export default function FindAdvisorPage() {
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-slate-900">Formal Opinion Letters</h3>
-                                    <p className="mt-1 text-slate-600">Get a Section 1202 opinion letter from a qualified tax attorney to protect against audit penalties.</p>
+                                    <h3 className="text-lg font-bold text-slate-900">Eligibility Verification</h3>
+                                    <p className="mt-1 text-slate-600">Confirm your stock meets the qualified small business requirements under IRC 1202(c) and 1202(e).</p>
                                 </div>
                             </div>
 
@@ -117,8 +117,8 @@ export default function FindAdvisorPage() {
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-slate-900">Holding Period Analysis</h3>
-                                    <p className="mt-1 text-slate-600">Complex timeline verification for ISO/NSO exercises, conversions, and secondary sales.</p>
+                                    <h3 className="text-lg font-bold text-slate-900">Holding Period Calculation</h3>
+                                    <p className="mt-1 text-slate-600">Determine your exact 5-year start date based on stock type, 83(b) elections, and tacking rules under IRC 1223.</p>
                                 </div>
                             </div>
 
@@ -129,15 +129,16 @@ export default function FindAdvisorPage() {
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-slate-900">State Tax Optimization</h3>
-                                    <p className="mt-1 text-slate-600">Strategies for non-conforming states like California, PA, and NJ.</p>
+                                    <h3 className="text-lg font-bold text-slate-900">State Tax Planning</h3>
+                                    <p className="mt-1 text-slate-600">Navigate states that don&apos;t conform to Section 1202, including California, Pennsylvania, New Jersey, and Mississippi.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="mt-8 pt-8 border-t border-gray-200">
-                            <p className="text-sm text-gray-500 italic">
-                                &quot;Finding a CPA who actually understands QSBS is a nightmare. This service connected me with an expert in 24 hours.&quot; — SaaS Founder, $12M Exit
+                            <p className="text-sm text-gray-500">
+                                We connect you with CPAs and tax attorneys who have direct experience with Section 1202 exclusions.
+                                All advisors in our network specialize in startup equity taxation.
                             </p>
                         </div>
                     </div>

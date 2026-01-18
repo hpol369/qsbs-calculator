@@ -22,8 +22,8 @@ export default function PlaybookPage() {
                         The Founder's Guide to <span className="text-emerald-400">Tax-Free Exits</span>
                     </h1>
                     <p className="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                        QSBS isn't just a checkbox on a tax form. It's a multi-year strategy.
-                        Here is the complete manual for navigating Section 1202 without getting trapped by the fine print.
+                        Section 1202 can exclude up to $10 million (or 10x basis) of capital gains from federal tax.
+                        But qualification requires meeting specific rules across multiple IRC sections. Here&apos;s what you need to know.
                     </p>
                 </div>
             </div>
@@ -45,7 +45,7 @@ export default function PlaybookPage() {
                                 The 5-Year Holding Period
                             </h3>
                             <p className="text-gray-600 text-sm leading-relaxed">
-                                The most common point of failure. Understand exactly when your clock starts—especially for options vs. stock.
+                                IRC 1202(a) requires holding QSBS for more than 5 years. When your clock starts depends on stock type and how you acquired it.
                             </p>
                         </div>
                         <div className="px-6 py-4 border-t border-gray-50 bg-gray-50 group-hover:bg-emerald-50/50 transition-colors">
@@ -67,7 +67,7 @@ export default function PlaybookPage() {
                                 The 83(b) Election Guide
                             </h3>
                             <p className="text-gray-600 text-sm leading-relaxed">
-                                The "billion dollar email." How a single piece of paper can start your QSBS clock years before you vest.
+                                Filing an 83(b) election within 30 days of a restricted stock grant starts your holding period immediately rather than at vesting.
                             </p>
                         </div>
                         <div className="px-6 py-4 border-t border-gray-50 bg-gray-50 group-hover:bg-blue-50/50 transition-colors">
@@ -89,7 +89,7 @@ export default function PlaybookPage() {
                                 Do You Need an Opinion Letter?
                             </h3>
                             <p className="text-gray-600 text-sm leading-relaxed">
-                                The IRS is scrutinizing QSBS claims more than ever. Learn when you need a formal legal opinion to audit-proof your return.
+                                A tax opinion letter documents your QSBS eligibility analysis and can provide penalty protection under IRC 6662 if challenged.
                             </p>
                         </div>
                         <div className="px-6 py-4 border-t border-gray-50 bg-gray-50 group-hover:bg-purple-50/50 transition-colors">
@@ -111,7 +111,7 @@ export default function PlaybookPage() {
                                 ISO Exercise & QSBS
                             </h3>
                             <p className="text-gray-600 text-sm leading-relaxed">
-                                The #1 mistake employees make: thinking their clock starts at grant. It starts at exercise. Don't get caught 6 days short.
+                                For stock options, the QSBS holding period begins at exercise, not grant. Understanding the timing is critical for meeting the 5-year requirement.
                             </p>
                         </div>
                         <div className="px-6 py-4 border-t border-gray-50 bg-gray-50 group-hover:bg-amber-50/50 transition-colors">
@@ -133,7 +133,7 @@ export default function PlaybookPage() {
                                 Founders vs. Employees
                             </h3>
                             <p className="text-gray-600 text-sm leading-relaxed">
-                                Founders lose QSBS on "secondary sales." Employees lose it on "late exercises." Every role has its own trapdoors.
+                                Founders typically acquire stock at incorporation while employees acquire through options. Each path has different QSBS implications.
                             </p>
                         </div>
                         <div className="px-6 py-4 border-t border-gray-50 bg-gray-50 group-hover:bg-indigo-50/50 transition-colors">
@@ -155,7 +155,7 @@ export default function PlaybookPage() {
                                 California & State Non-Conformity
                             </h3>
                             <p className="text-gray-600 text-sm leading-relaxed">
-                                You can save millions on federal tax and still owe California 13.3%. Why moving states isn't as simple as it sounds.
+                                California, Pennsylvania, New Jersey, and Mississippi do not conform to IRC 1202. Federal exclusion does not eliminate state tax in these states.
                             </p>
                         </div>
                         <div className="px-6 py-4 border-t border-gray-50 bg-gray-50 group-hover:bg-red-50/50 transition-colors">
@@ -177,7 +177,7 @@ export default function PlaybookPage() {
                                 The Founder Stack
                             </h3>
                             <p className="text-slate-300 text-sm leading-relaxed">
-                                The exact banking, legal, and cap table setup you need to ensure your stock remains QSBS qualified.
+                                Cap table management, banking, and legal tools that help maintain proper documentation for QSBS compliance.
                             </p>
                         </div>
                         <div className="px-6 py-4 border-t border-slate-800 bg-slate-800/50 group-hover:bg-slate-800 transition-colors">
@@ -197,10 +197,10 @@ export default function PlaybookPage() {
 
                     <div className="relative z-10 max-w-2xl mx-auto">
                         <h2 className="text-3xl font-bold text-white mb-4">
-                            Don't Leave It to Chance
+                            Need Professional Guidance?
                         </h2>
                         <p className="text-slate-300 text-lg mb-8">
-                            QSBS rules are complex and high-stakes. If you have over $500k in potential savings, you need a professional review.
+                            Section 1202 eligibility involves multiple IRC provisions and fact-specific analysis. Consider consulting a tax professional for your situation.
                         </p>
                         <Link
                             href="/find-advisor"

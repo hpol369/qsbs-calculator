@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "QSBS for Founders vs. Employees: The Critical Differences",
-    description: "Founders lose QSBS on secondary sales. Employees lose it on late exercises. Understand the specific traps for your role.",
+    title: "QSBS for Founders vs. Employees: How Stock Acquisition Differs",
+    description: "Founders typically receive stock at incorporation while employees acquire through options. Learn how these different paths affect QSBS qualification.",
     openGraph: {
-        title: "QSBS for Founders vs. Employees: The Critical Differences",
-        description: "The rules are the same, but the traps are different. A comparison guide for startup stakeholders.",
+        title: "QSBS for Founders vs. Employees: How Stock Acquisition Differs",
+        description: "Understanding how founders and employees acquire QSBS differently and the implications for the 5-year holding period.",
         type: 'article',
     },
 };
@@ -29,14 +29,14 @@ export default function FoundersVsEmployeesPage() {
 
                 <header className="text-center mb-12">
                     <span className="inline-block px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-bold rounded-full mb-4 tracking-wide uppercase">
-                        Persona Guide
+                        Stock Acquisition
                     </span>
                     <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 mb-6">
                         Founders vs. Employees
                     </h1>
                     <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                        The tax code doesn't explicitly distinguish between you. <br className="hidden sm:block" />
-                        But in practice, you face completely different risks.
+                        How you acquire your stock determines when your QSBS holding period begins.
+                        Founders and employees typically follow different paths to stock ownership.
                     </p>
                 </header>
 
@@ -50,27 +50,27 @@ export default function FoundersVsEmployeesPage() {
 
                     <div className="divide-y divide-gray-200 text-sm sm:text-base">
                         <div className="grid grid-cols-3">
-                            <div className="p-4 sm:p-6 font-medium text-gray-900 bg-gray-50">Clock Start Date</div>
-                            <div className="p-4 sm:p-6 text-center">Incorporation Date</div>
-                            <div className="p-4 sm:p-6 text-center font-bold text-red-600">Exercise Date (Not Grant)</div>
+                            <div className="p-4 sm:p-6 font-medium text-gray-900 bg-gray-50">Typical Acquisition</div>
+                            <div className="p-4 sm:p-6 text-center">Stock at incorporation</div>
+                            <div className="p-4 sm:p-6 text-center">Stock options (ISO/NSO)</div>
                         </div>
 
                         <div className="grid grid-cols-3">
-                            <div className="p-4 sm:p-6 font-medium text-gray-900 bg-gray-50">Biggest Risk</div>
-                            <div className="p-4 sm:p-6 text-center">Secondary Sales (Redemptions)</div>
-                            <div className="p-4 sm:p-6 text-center">The "Golden Handcuffs"</div>
+                            <div className="p-4 sm:p-6 font-medium text-gray-900 bg-gray-50">Holding Period Start</div>
+                            <div className="p-4 sm:p-6 text-center">Date stock is issued</div>
+                            <div className="p-4 sm:p-6 text-center font-medium text-slate-900">Date of exercise</div>
                         </div>
 
                         <div className="grid grid-cols-3">
-                            <div className="p-4 sm:p-6 font-medium text-gray-900 bg-gray-50">Transferability</div>
-                            <div className="p-4 sm:p-6 text-center">Can gift to trusts/family</div>
-                            <div className="p-4 sm:p-6 text-center">Limited by vesting/company</div>
+                            <div className="p-4 sm:p-6 font-medium text-gray-900 bg-gray-50">83(b) Election</div>
+                            <div className="p-4 sm:p-6 text-center">Often applicable for restricted stock</div>
+                            <div className="p-4 sm:p-6 text-center">May apply for early exercise</div>
                         </div>
 
                         <div className="grid grid-cols-3">
-                            <div className="p-4 sm:p-6 font-medium text-gray-900 bg-gray-50">Audit Profile</div>
-                            <div className="p-4 sm:p-6 text-center font-bold text-amber-600">High ($10M+ exclusions)</div>
-                            <div className="p-4 sm:p-6 text-center text-gray-500">Lower (unless early employee)</div>
+                            <div className="p-4 sm:p-6 font-medium text-gray-900 bg-gray-50">Original Issuance</div>
+                            <div className="p-4 sm:p-6 text-center">Direct from corporation</div>
+                            <div className="p-4 sm:p-6 text-center">Direct from corporation at exercise</div>
                         </div>
                     </div>
                 </div>
@@ -81,18 +81,20 @@ export default function FoundersVsEmployeesPage() {
                     <div className="prose prose-slate">
                         <h3 className="flex items-center text-emerald-800">
                             <span className="bg-emerald-100 p-2 rounded-lg mr-3">🚀</span>
-                            The Founder Trap
+                            Founder Stock
                         </h3>
-                        <p className="lead text-sm">
-                            As a founder, you got your stock "cheap" at incorporation. Your basis is near zero, meaning 100% of your exit is gain.
-                        </p>
-                        <p className="font-bold text-sm">Your Enemy: Stock Redemptions</p>
                         <p className="text-sm">
-                            Did you cash out some chips in a Series B or C secondary? <strong>Warning.</strong>
-                            If the company bought back stock from <em>anyone</em> (not just you) within a 2-year window of your issuance, it could incinerate your QSBS status.
+                            Founders typically receive stock directly from the corporation at or near incorporation, often at a nominal price.
+                            The holding period begins when the stock is issued.
+                        </p>
+                        <p className="font-bold text-sm">Key Considerations</p>
+                        <p className="text-sm">
+                            If stock is subject to vesting, filing an 83(b) election within 30 days starts the QSBS clock immediately.
+                            Without the election, the holding period begins as shares vest.
                         </p>
                         <p className="text-sm">
-                            Also, did you convert from an LLC? The time you spent as an LLC member <strong>does not count</strong> towards the 5-year clock.
+                            Companies that converted from an LLC or other entity should review when the C-Corp status began,
+                            as the QSBS holding period cannot start before the corporation existed.
                         </p>
                     </div>
 
@@ -100,21 +102,22 @@ export default function FoundersVsEmployeesPage() {
                     <div className="prose prose-slate">
                         <h3 className="flex items-center text-blue-800">
                             <span className="bg-blue-100 p-2 rounded-lg mr-3">💼</span>
-                            The Employee Trap
+                            Employee Stock Options
                         </h3>
-                        <p className="lead text-sm">
-                            You likely hold Options (ISOs or NSOs) or RSUs.
-                        </p>
-                        <p className="font-bold text-sm">Your Enemy: The Exercise Date</p>
                         <p className="text-sm">
-                            The single most tragic mistake: <br />
-                            <em>"I've worked here for 6 years, so I'm vested and qualified."</em>
+                            Employees typically receive stock options (ISOs or NSOs) that grant the right to purchase stock at a set price.
+                            Options are not stock ownership until exercised.
+                        </p>
+                        <p className="font-bold text-sm">Key Considerations</p>
+                        <p className="text-sm">
+                            The QSBS holding period begins at exercise, not at grant. Stock must be held for more than 5 years from the exercise date.
                         </p>
                         <p className="text-sm">
-                            <strong>False.</strong> You don't own stock until you exercise. If you wait until the acquisition to exercise ("cashless exercise"), your holding period is <strong>0 days</strong>. You pay full tax.
+                            Some companies allow early exercise of unvested options. Combined with an 83(b) election,
+                            this can start the holding period before vesting completes.
                         </p>
                         <p className="text-sm text-blue-600 font-medium">
-                            <Link href="/iso-exercise">Read the ISO guide for more details →</Link>
+                            <Link href="/iso-exercise">Learn more about ISO exercises →</Link>
                         </p>
                     </div>
 
@@ -122,16 +125,16 @@ export default function FoundersVsEmployeesPage() {
 
                 {/* CTA */}
                 <div className="mt-16 p-8 bg-gray-900 rounded-2xl text-center text-white">
-                    <h3 className="text-2xl font-bold mb-4">It's Complicated for Everyone</h3>
+                    <h3 className="text-2xl font-bold mb-4">Questions About Your Situation?</h3>
                     <p className="text-gray-300 mb-8 max-w-lg mx-auto">
-                        Whether you are a founder worrying about redemptions or an early employee planning an exercise,
-                        don't navigate this alone.
+                        QSBS qualification depends on your specific facts and circumstances.
+                        Consider consulting a tax professional to review your stock acquisition details.
                     </p>
                     <Link
                         href="/find-advisor"
                         className="inline-flex items-center justify-center px-8 py-3 text-base font-bold text-slate-900 bg-emerald-400 rounded-lg hover:bg-emerald-300 transition-all"
                     >
-                        Talk to an Expert
+                        Find a QSBS Specialist
                     </Link>
                 </div>
 
