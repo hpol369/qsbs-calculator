@@ -1,8 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc; /* Slate-50 */
+  --foreground: #0f172a; /* Slate-900 */
+}
+
+@theme {
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b; /* Deep Heritage Green */
+  --color-emerald-950: #022c22;
+  
+  --color-gold-50: #fffbeb;
+  --color-gold-100: #fef3c7;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b; /* Rich Gold */
+  --color-gold-600: #d97706;
+  --color-gold-700: #b45309;
+  
+  --font-display: var(--font-playfair);
+  --font-sans: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,10 +41,27 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Form element styling - ensure readable text on light backgrounds */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), serif;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Form element styling */
 input,
 select,
 textarea {
@@ -29,13 +72,13 @@ textarea {
 /* Placeholder text contrast fix */
 input::placeholder,
 textarea::placeholder {
-  color: #6b7280;
+  color: #94a3b8;
   opacity: 1;
 }
 
 /* Date input placeholder fix for webkit browsers */
 input[type="date"]:invalid::-webkit-datetime-edit {
-  color: #6b7280;
+  color: #94a3b8;
 }
 
 /* Select option styling */
@@ -59,27 +102,9 @@ option {
   .print\:block {
     display: block !important;
   }
-
-  .print\:space-y-4 > * + * {
-    margin-top: 1rem;
-  }
-
-  .print\:py-4 {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .print\:p-4 {
-    padding: 1rem;
-  }
-
-  .print\:text-3xl {
-    font-size: 1.875rem;
-  }
-
-  /* Ensure backgrounds print */
+  
   * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
+     -webkit-print-color-adjust: exact !important;
+     print-color-adjust: exact !important;
+   }
 }

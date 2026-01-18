@@ -1,28 +1,33 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
+import { Inter, Playfair_Display } from 'next/font/google';
 import "./globals.css";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
+import Script from 'next/script';
+import Link from 'next/link';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
 
 const baseUrl = 'https://www.qsbsguide.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: "QSBS Calculator – Estimate Your Section 1202 Tax Savings",
-  description: "Free QSBS eligibility calculator. Find your holding period start date, estimate tax savings up to $10M+, and check your state's conformity. Takes 60 seconds.",
+  title: "QSBS Guide | The Founder's Guide to Tax-Free Exits",
+  description: "Stop leaving millions on the table. The complete guide to Section 1202 Qualified Small Business Stock (QSBS) tax exemptions.",
   keywords: ["QSBS", "Section 1202", "qualified small business stock", "tax savings calculator", "QSBS eligibility", "capital gains exclusion"],
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "QSBS Calculator – Estimate Your Section 1202 Tax Savings",
-    description: "Estimate your QSBS tax savings in 60 seconds. Calculate holding period, federal savings up to $10M+, and state conformity.",
+    title: "QSBS Guide | The Founder's Guide to Tax-Free Exits",
+    description: "Estimate your QSBS tax savings and audit-proof your exclusion.",
     type: "website",
     url: baseUrl,
     siteName: "QSBS Guide",
   },
   twitter: {
     card: "summary_large_image",
-    title: "QSBS Calculator – Section 1202 Tax Savings",
-    description: "Estimate your QSBS tax savings in 60 seconds.",
+    title: "QSBS Guide | The Founder's Guide to Tax-Free Exits",
+    description: "Estimate your QSBS tax savings and audit-proof your exclusion.",
   },
 };
 
@@ -76,52 +81,68 @@ const calculatorSchema = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+          `}
+        </Script>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteSchema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(calculatorSchema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(calculatorSchema) }}
         />
       </head>
-      <body className="antialiased">
-        <GoogleAnalytics />
-        <nav className="bg-white border-b border-gray-200 print:hidden">
+      <body className="font-sans bg-slate-50 text-slate-900 antialiased selection:bg-emerald-200 selection:text-emerald-900">
+
+        {/* Global Navigation */}
+        <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 dark:bg-slate-900/80 dark:border-slate-800 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
-              <div className="flex">
-                <a href="/" className="flex-shrink-0 flex items-center font-bold text-xl text-emerald-900">
-                  QSBS Guide
-                </a>
-              </div>
               <div className="flex items-center">
-                <a
+                <Link href="/" className="flex items-center group">
+                  <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center mr-3 group-hover:bg-emerald-500 transition-colors shadow-sm">
+                    <span className="text-white font-serif font-bold text-xl">Q</span>
+                  </div>
+                  <span className="font-serif font-bold text-xl text-slate-900 dark:text-white tracking-tight">QSBS Guide</span>
+                </Link>
+
+                <div className="hidden md:flex ml-10 space-x-8">
+                  <Link href="/playbook" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">The Playbook</Link>
+                  <Link href="/holding-period" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Visualizer</Link>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Link
                   href="/find-advisor"
-                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                  className="hidden sm:inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-slate-900 hover:bg-emerald-700 transition-all shadow-md hover:shadow-lg"
                 >
                   Find an Advisor
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </nav>
+
         {children}
       </body>
     </html>
