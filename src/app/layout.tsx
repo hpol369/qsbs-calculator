@@ -11,7 +11,7 @@ const baseUrl = 'https://www.qsbsguide.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: "QSBS Guide | The Founder's Guide to Tax-Free Exits",
+  title: "QSBS Calculator | The Founder's Guide to Tax-Free Exits",
   description: "Stop leaving millions on the table. The complete guide to Section 1202 Qualified Small Business Stock (QSBS) tax exemptions.",
   keywords: ["QSBS", "Section 1202", "qualified small business stock", "tax savings calculator", "QSBS eligibility", "capital gains exclusion"],
   alternates: {
